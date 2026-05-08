@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Minimal Tech Hero Gallery</title>
+    <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="theme.css">
+</head>
+<body>
+    <div class="sidebar"><div class="sidebar-item" data-index="0"><span class="num">1</span><span class="title">Minimal Tech Hero Gallery</span></div><div class="sidebar-item" data-index="1"><span class="num">2</span><span class="title">01. TOC (목차)</span></div><div class="sidebar-item" data-index="2"><span class="num">3</span><span class="title">02. Cards (카드)</span></div><div class="sidebar-item" data-index="3"><span class="num">4</span><span class="title">03. Checklist (체크리스트)</span></div><div class="sidebar-item" data-index="4"><span class="num">5</span><span class="title">04. Flow (흐름도)</span></div><div class="sidebar-item" data-index="5"><span class="num">6</span><span class="title">05. Contract (다단 노드)</span></div><div class="sidebar-item" data-index="6"><span class="num">7</span><span class="title">06. Table (표)</span></div><div class="sidebar-item" data-index="7"><span class="num">8</span><span class="title">07. Timeline (타임라인)</span></div><div class="sidebar-item" data-index="8"><span class="num">9</span><span class="title">08. Split (대비)</span></div><div class="sidebar-item" data-index="9"><span class="num">10</span><span class="title">09. Map (영역 맵)</span></div><div class="sidebar-item" data-index="10"><span class="num">11</span><span class="title">10. Key Message (핵심 메시지)</span></div><div class="sidebar-item" data-index="11"><span class="num">12</span><span class="title">11. Banner (안내 배너)</span></div><div class="sidebar-item" data-index="12"><span class="num">13</span><span class="title">12. Summary (요약)</span></div><div class="sidebar-item" data-index="13"><span class="num">14</span><span class="title">13. CTA (행동 유도)</span></div><div class="sidebar-item" data-index="14"><span class="num">15</span><span class="title">14. Source (출처)</span></div><div class="sidebar-item" data-index="15"><span class="num">16</span><span class="title">15. Image (이미지 프레임)</span></div><div class="sidebar-item" data-index="16"><span class="num">17</span><span class="title">16. Video (영상 프레임)</span></div></div>
+    <div id="presentation">
+        <div id="cover" class="step" data-x="0" data-y="0" style="--x:0px; --y:0px;">
+        <div style="display:flex; flex-direction:column; justify-content:center; align-items:flex-start; height:100%;
+                    padding: var(--slide-pad-y) var(--slide-pad-x); box-sizing:border-box; max-width:var(--stage-w); margin:auto;">
+          <p style="font-size:14px; font-weight:800; letter-spacing:.08em; text-transform:uppercase;
+                    color:var(--muted); margin:0 0 clamp(16px,3vh,28px);">COMPONENT MASTER</p>
+          <h1 style="margin:0 0 clamp(12px,2vh,20px);">Minimal Tech Hero Gallery</h1>
+          <p class="lead" style="margin:0 0 clamp(20px,4vh,40px);">밝은 미니멀 기술 서비스 톤의 컴포넌트 전수 가이드</p>
+          <p style="font-size:15px; color:var(--muted); border-top:1px solid var(--line);
+                    padding-top:16px; width:100%; margin:0;">jung</p>
+        </div></div><div id="s-toc" class="step" data-x="1320" data-y="0" style="--x:1320px; --y:0px;">
+        <div class="stage">
+          <div class="kicker">
+          <span></span>
+          <span>2 / 17</span>
+        </div>
+          <h2>01. TOC (목차)</h2>
+          <p class="lead">발표의 전체 구조를 보여주는 컴포넌트입니다.</p>
+          <ul class="toc"><li class="toc-item">
+              <span>서론: 비즈니스 현황</span>
+              <span>03</span>
+            </li><li class="toc-item">
+              <span>본론: 핵심 전략</span>
+              <span>08</span>
+            </li><li class="toc-item">
+              <span>결론: 향후 계획</span>
+              <span>15</span>
+            </li></ul>
+        </div></div><div id="s-cards" class="step" data-x="2640" data-y="0" style="--x:2640px; --y:0px;">
+        <div class="stage">
+          <div class="kicker">
+          <span></span>
+          <span>3 / 17</span>
+        </div>
+          <h2>02. Cards (카드)</h2>
+          <p class="lead">병렬적인 항목들을 그리드 형태로 나열할 때 사용합니다.</p>
+          <div class="cards">
+            <div class="card">
+              <strong>항목 A</strong>
+              <span>상세 설명을 한 줄 또는 두 줄로 작성합니다.</span>
+            </div>
+            <div class="card">
+              <strong>항목 B</strong>
+              <span>상세 설명을 한 줄 또는 두 줄로 작성합니다.</span>
+            </div>
+            <div class="card">
+              <strong>항목 C</strong>
+              <span>상세 설명을 한 줄 또는 두 줄로 작성합니다.</span>
+            </div></div>
+        </div></div><div id="s-checklist" class="step" data-x="3960" data-y="0" style="--x:3960px; --y:0px;">
+        <div class="stage">
+          <div class="kicker">
+          <span></span>
+          <span>4 / 17</span>
+        </div>
+          <h2>03. Checklist (체크리스트)</h2>
+          <p class="lead">점검 항목이나 주요 특징을 불렛 포인트로 나열합니다.</p>
+          <ul class="checklist"><li class="check-item">첫 번째 핵심 준수 사항</li><li class="check-item">두 번째 데이터 보안 원칙</li><li class="check-item">세 번째 운영 효율화 방안</li></ul>
+        </div></div><div id="s-flow" class="step" data-x="0" data-y="820" style="--x:0px; --y:820px;">
+        <div class="stage">
+          <div class="kicker">
+          <span></span>
+          <span>5 / 17</span>
+        </div>
+          <h2>04. Flow (흐름도)</h2>
+          <p class="lead">순차적인 프로세스나 단계를 화살표 방향으로 표현합니다.</p>
+          <div class="flow">
+            <div class="node">
+              <h3>분석</h3>
+              <p>현상 파악 및 데이터 수집</p>
+            </div>
+            <div class="node">
+              <h3>설계</h3>
+              <p>해결책 도출 및 시스템 설계</p>
+            </div>
+            <div class="node">
+              <h3>실행</h3>
+              <p>실제 적용 및 모니터링</p>
+            </div></div>
+        </div></div><div id="s-contract" class="step" data-x="1320" data-y="820" style="--x:1320px; --y:820px;">
+        <div class="stage">
+          <div class="kicker">
+          <span></span>
+          <span>6 / 17</span>
+        </div>
+          <h2>05. Contract (다단 노드)</h2>
+          <p class="lead">비교나 분류된 항목들을 박스 형태로 보여줍니다.</p>
+          <div class="contract">
+            <div class="node">
+              <h3>표준형</h3>
+              <p>가장 기본적인 비즈니스 옵션</p>
+            </div>
+            <div class="node">
+              <h3>프리미엄</h3>
+              <p>확장성과 커스텀이 강화된 옵션</p>
+            </div></div>
+        </div></div><div id="s-table" class="step" data-x="2640" data-y="820" style="--x:2640px; --y:820px;">
+        <div class="stage">
+          <div class="kicker">
+          <span></span>
+          <span>7 / 17</span>
+        </div>
+          <h2>06. Table (표)</h2>
+          <p class="lead">정량적인 수치나 복잡한 데이터를 표 형식으로 정리합니다.</p>
+          <table><thead><tr><th>구분</th><th>2023 실적</th><th>2024 목표</th><th>상태</th></tr></thead><tbody><tr><td>매출액</td><td>5.2억</td><td>7.0억</td><td>상승</td></tr><tr><td>영업이익</td><td>1.1억</td><td>1.5억</td><td>안정</td></tr></tbody></table>
+        </div></div><div id="s-timeline" class="step" data-x="3960" data-y="820" style="--x:3960px; --y:820px;">
+        <div class="stage">
+          <div class="kicker">
+          <span></span>
+          <span>8 / 17</span>
+        </div>
+          <h2>07. Timeline (타임라인)</h2>
+          <p class="lead">시간의 흐름에 따른 주요 이정표(Milestone)를 표시합니다.</p>
+          <div class="timeline">
+            <div class="timeline-item">
+              <strong>2024.01</strong>
+              <span>프로젝트 킥오프</span>
+            </div>
+            <div class="timeline-item">
+              <strong>2024.06</strong>
+              <span>MVP 개발 완료</span>
+            </div>
+            <div class="timeline-item">
+              <strong>2024.12</strong>
+              <span>정식 서비스 런칭</span>
+            </div></div>
+        </div></div><div id="s-split" class="step" data-x="0" data-y="1640" style="--x:0px; --y:1640px;">
+        <div class="stage">
+          <div class="kicker">
+          <span></span>
+          <span>9 / 17</span>
+        </div>
+          <h2>08. Split (대비)</h2>
+          <p class="lead">As-Is / To-Be 또는 장단점 등을 좌우로 대비시킵니다.</p>
+          <div class="split">
+            <div class="path">
+              <strong>As-Is</strong>
+              <p>수동 데이터 입력 및 관리</p>
+            </div>
+            <div class="path">
+              <strong>To-Be</strong>
+              <p>AI 기반 자동화 시스템 도입</p>
+            </div></div>
+        </div></div><div id="s-map" class="step" data-x="1320" data-y="1640" style="--x:1320px; --y:1640px;">
+        <div class="stage">
+          <div class="kicker">
+          <span></span>
+          <span>10 / 17</span>
+        </div>
+          <h2>09. Map (영역 맵)</h2>
+          <p class="lead">계층 구조나 영역별 구분을 박스 레이아웃으로 표현합니다.</p>
+          <div class="map">
+            <div class="box">
+              <strong>인프라</strong>
+              <span>클라우드 및 데이터베이스</span>
+            </div>
+            <div class="box">
+              <strong>어플리케이션</strong>
+              <span>사용자 인터페이스 및 로직</span>
+            </div></div>
+        </div></div><div id="s-key" class="step" data-x="2640" data-y="1640" style="--x:2640px; --y:1640px;">
+        <div class="stage">
+          <div class="kicker">
+          <span></span>
+          <span>11 / 17</span>
+        </div>
+          <h2>10. Key Message (핵심 메시지)</h2>
+          <p class="lead">가장 중요한 한 문장을 거대하게 강조합니다.</p>
+          <div class="key-message">데이터는 거짓말을 하지 않으며, 디자인은 신뢰를 만듭니다.</div>
+        </div></div><div id="s-banner" class="step" data-x="3960" data-y="1640" style="--x:3960px; --y:1640px;">
+        <div class="stage">
+          <div class="kicker">
+          <span></span>
+          <span>12 / 17</span>
+        </div>
+          <h2>11. Banner (안내 배너)</h2>
+          <p class="lead">주의, 경고, 팁 등의 부가 정보를 강조된 박스에 담습니다.</p>
+          <div class="banner info">본 슬라이드 디자인은 모든 브라우저에서 동일하게 유지됩니다.</div><div class="banner warn">반드시 최신 빌드 스크립트를 사용해야 레이아웃이 깨지지 않습니다.</div>
+        </div></div><div id="s-summary" class="step" data-x="0" data-y="2460" style="--x:0px; --y:2460px;">
+        <div class="stage">
+          <div class="kicker">
+          <span></span>
+          <span>13 / 17</span>
+        </div>
+          <h2>12. Summary (요약)</h2>
+          <p class="lead">슬라이드의 결론이나 요약을 강조된 선과 함께 박스로 보여줍니다.</p>
+          <div class="summary"><p>결론적으로 본 프레임워크는 제작 속도와 시각적 품질을 동시에 보장합니다.</p></div>
+        </div></div><div id="s-cta" class="step" data-x="1320" data-y="2460" style="--x:1320px; --y:2460px;">
+        <div class="stage">
+          <div class="kicker">
+          <span></span>
+          <span>14 / 17</span>
+        </div>
+          <h2>13. CTA (행동 유도)</h2>
+          <p class="lead">발표 끝에 사용자의 다음 행동을 유도하는 버튼을 배치합니다.</p>
+          <a class="cta" href="#">제안서 다운로드</a>
+        </div></div><div id="s-source" class="step" data-x="2640" data-y="2460" style="--x:2640px; --y:2460px;">
+        <div class="stage">
+          <div class="kicker">
+          <span></span>
+          <span>15 / 17</span>
+        </div>
+          <h2>14. Source (출처)</h2>
+          <p class="lead">데이터나 인용구의 출처를 작고 정갈하게 표기합니다.</p>
+          <div class="source">출처: 예시 데이터셋</div>
+        </div></div><div id="s-image" class="step" data-x="3960" data-y="2460" style="--x:3960px; --y:2460px;">
+        <div class="stage">
+          <div class="kicker">
+          <span></span>
+          <span>16 / 17</span>
+        </div>
+          <h2>15. Image (이미지 프레임)</h2>
+          <p class="lead">이미지를 정해진 프레임 안에 깔끔하게 배치합니다.</p>
+          <div class="image-frame" aria-label="Image placeholder"></div>
+        </div></div><div id="s-video" class="step" data-x="0" data-y="3280" style="--x:0px; --y:3280px;">
+        <div class="stage">
+          <div class="kicker">
+          <span></span>
+          <span>17 / 17</span>
+        </div>
+          <h2>16. Video (영상 프레임)</h2>
+          <p class="lead">영상을 배경이나 콘텐츠로 활용하는 프레임을 제공합니다.</p>
+          <div class="video-frame" aria-label="Video placeholder"></div>
+        </div></div>
+    </div>
+    <script src="engine.js"></script>
+</body>
+</html>

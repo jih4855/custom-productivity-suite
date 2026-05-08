@@ -1,0 +1,42 @@
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Logs and local caches
+*.log
+.cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Nested repository metadata
+.git/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+ENV/
+
+# Project specific
+*.pdf
+*.html.tmp
+*.bak
+preview/
+index.html
+!skills/**/index.html
+!skills/**/assets/examples/**/index.html
+
+# Local data
+.env
+.env.*
+*.xlsx
+*.csv
+data.json
+!skills/**/assets/examples/**/data.json
+!skills/**/assets/engine-creator/templates/data.json

@@ -1,0 +1,951 @@
+/*
+ * minimal-tech-hero.css
+ * Bright, minimal SaaS/AI landing 스타일 PPT 컴포넌트 디자인 시스템
+ *
+ * 책임 분리 (SKILL.md §0.8 / §4):
+ *   base.css → 프레임 (.step / .stage / 5층 그리드 / 사이드바)
+ *   이 파일 → 색·타이포·border·shadow·간격·컴포넌트 시각 표현
+ *
+ * 출력 형식:
+ *   1) 디자인 토큰 (CSS 변수)
+ *   2) 공통 슬라이드 레이아웃
+ *   3) 컴포넌트별 CSS (16종 전수 구현)
+ */
+
+/* ============================================================ */
+/*  1. Design variables                                          */
+/* ============================================================ */
+:root {
+  /* surface */
+  --bg: #f7f7fa;
+  --bg-sub: #f7f7fa;
+  --surface: rgba(255, 255, 255, 0.78);
+  --surface-strong: rgba(255, 255, 255, 0.92);
+
+  /* ink */
+  --text-primary: #111111;
+  --text-secondary: #555555;
+  --text-muted: #777777;
+  --ink: var(--text-primary);
+  --muted: var(--text-secondary);
+
+  /* accent */
+  --accent: #6366f1;
+  --accent-soft: rgba(99, 102, 241, 0.10);
+  --accent-line: rgba(99, 102, 241, 0.22);
+
+  /* line / shadow / radius */
+  --border: rgba(0, 0, 0, 0.06);
+  --line: var(--border);
+  --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 12px 36px rgba(0, 0, 0, 0.06);
+  --radius-pill: 999px;
+  --radius-card: 24px;
+  --radius-sm: 14px;
+
+  /* layout */
+  --stage-w: 1080px;
+  --slide-pad-x: clamp(48px, 7vw, 88px);
+  --slide-pad-y: clamp(56px, 8vh, 88px);
+  --stage-row-gap: 28px;
+  --component-gap: 32px;
+  --card-inner-gap: 16px;
+
+  /* font */
+  font-family: Pretendard, "Noto Sans KR", Inter, system-ui,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* ============================================================ */
+/*  2. Common slide layout                                       */
+/* ============================================================ */
+html,
+body {
+  background: var(--bg);
+  color: var(--text-primary);
+}
+
+#presentation,
+.step {
+  background: var(--bg);
+}
+
+.step {
+  align-items: center;
+  text-align: center;
+}
+
+/* sidebar 톤 다운 */
+.sidebar {
+  background: transparent;
+  border-right: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+.sidebar:hover {
+  background: var(--surface-strong);
+  box-shadow: var(--shadow-soft);
+  border-right: 1px solid var(--border);
+}
+.sidebar-item.active {
+  background: var(--accent-soft);
+  border-left-color: var(--accent);
+  color: var(--accent);
+}
+
+/* stage 텍스트 중앙 */
+.stage {
+  width: min(var(--stage-w), 100%);
+  margin-inline: auto;
+  align-items: center;
+  justify-content: center;
+  row-gap: var(--stage-row-gap);
+  text-align: center;
+}
+
+/* ----- Floating pill nav (header) — build.py가 출력하는 .kicker ----- */
+.kicker {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: auto;
+  min-width: 168px;
+  flex: 0 0 auto;
+  align-self: center;
+  padding: 8px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--text-secondary);
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.kicker > span:first-child {
+  position: relative;
+  padding-left: 14px;
+  color: var(--text-primary);
+  font-size: 0;
+  letter-spacing: 0;
+  width: 14px;
+  height: 14px;
+}
+.kicker > span:first-child::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-soft);
+}
+.kicker > span:last-child {
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+}
+
+/* ----- Typography ----- */
+h1 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: clamp(61px, 7.2vw, 101px);
+  line-height: 1.08;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  text-wrap: balance;
+}
+h2 {
+  max-width: 920px;
+  margin: 0 auto;
+  color: var(--text-primary);
+  font-size: clamp(41px, 4.4vw, 59px);
+  line-height: 1.12;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+.lead {
+  max-width: 720px;
+  margin: 0 auto;
+  color: var(--text-secondary);
+  font-size: clamp(22px, 1.55vw, 25px);
+  line-height: 1.55;
+  font-weight: 400;
+  text-wrap: balance;
+}
+
+/* ----- 컴포넌트 폭 통일 -----
+   stage가 1120px(--stage-w)로 가로 폭을 책임지므로 컴포넌트는 100% 채움 */
+.cards,
+.flow,
+.contract,
+.map,
+.split,
+.toc,
+.timeline,
+.checklist,
+table,
+.summary,
+.banner,
+.source,
+.key-message,
+.image-frame,
+.video-frame {
+  width: 100%;
+}
+
+/* base.css의 남는 높이 채우기 규칙을 이 테마에서는 끈다.
+   모든 슬라이드는 kicker → title → lead → main 컴포넌트 간격을 같은 row-gap으로 맞춘다. */
+.stage > :is(.grid,
+  .cards,
+  .flow,
+  .contract,
+  .map,
+  .split,
+  table,
+  .image-frame,
+  .video-frame,
+  .timeline,
+  .checklist,
+  .diagram,
+  .chart,
+  .infographic,
+  .toc,
+  .summary,
+  .banner,
+  .source,
+  .footnote,
+  .cta,
+  .key-message) {
+  flex: 0 0 auto;
+  min-height: auto;
+}
+
+/* ============================================================ */
+/*  3. 컴포넌트별 CSS (16종 — SKILL.md §3.4 매핑)                */
+/* ============================================================ */
+
+/* --------- 3-1. cards ---------
+   build.py: <div class="cards"><div class="card"><strong/><span/></div>...</div>
+*/
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: min-content;
+  align-content: center;
+  gap: var(--component-gap);
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--card-inner-gap);
+  padding: var(--gap-lg);
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card);
+}
+.card strong {
+  display: block;
+  color: var(--text-primary);
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.card span {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 21px;
+  line-height: 1.6;
+}
+
+/* --------- 3-2. flow ---------
+   build.py: <div class="flow"><div class="node"><h3/><p/></div>...</div>
+   가로 단계형 + 점선 connector
+*/
+.flow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: min-content;
+  align-content: center;
+  gap: var(--component-gap);
+  counter-reset: flow-step;
+}
+.flow .node {
+  position: relative;
+  padding: var(--gap-lg) var(--gap-md);
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
+  counter-increment: flow-step;
+}
+.flow .node::before {
+  content: counter(flow-step, decimal-leading-zero);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--gap-md);
+  padding: 6px 16px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  border-radius: var(--radius-pill);
+}
+.flow .node:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -14px;
+  width: 16px;
+  height: 1px;
+  background: var(--border);
+  transform: translateY(-50%);
+}
+.flow .node h3 {
+  margin: 0 0 10px;
+  color: var(--text-primary);
+  font-size: 22px;
+  font-weight: 800;
+}
+.flow .node p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 19px;
+  line-height: 1.55;
+}
+
+/* --------- 3-3. contract ---------
+   build.py: <div class="contract"><div class="node"><h3/><p/></div>...</div>
+   계약/조건 카드 — 좌측 accent 라인 + 라벨 톤 헤더
+*/
+.contract {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+  grid-auto-rows: min-content;
+  align-content: center;
+  gap: var(--component-gap);
+}
+.contract .node {
+  position: relative;
+  padding: var(--gap-lg);
+  padding-left: calc(var(--gap-lg) + 6px);
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+.contract .node::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 36px;
+  bottom: 36px;
+  width: 4px;
+  background: var(--accent);
+  border-radius: var(--radius-pill);
+}
+.contract .node h3 {
+  margin: 0 0 10px;
+  color: var(--text-muted);
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.contract .node p {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+/* --------- 3-4. split ---------
+   build.py: <div class="split"><div class="path"><strong/><p/></div>x2</div>
+*/
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-content: center;
+  gap: var(--component-gap);
+}
+.split .path {
+  padding: var(--gap-xl) var(--gap-lg);
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
+}
+.split .path:first-child {
+  border-color: var(--accent-line);
+  background: linear-gradient(180deg, var(--accent-soft), var(--surface));
+}
+.split .path strong {
+  display: block;
+  margin: 0 0 var(--gap-md);
+  color: var(--text-primary);
+  font-size: 29px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+.split .path:first-child strong {
+  color: var(--accent);
+}
+.split .path p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 21px;
+  line-height: 1.65;
+}
+
+/* --------- 3-5. table ---------
+   build.py: <table><thead><tr><th/></tr></thead><tbody><tr><td/></tr></tbody></table>
+*/
+table {
+  width: min(672px, 70%);
+  margin-inline: auto;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  text-align: center;
+}
+th,
+td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 20px;
+  text-align: center;
+  vertical-align: middle;
+}
+th {
+  color: var(--text-primary);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  background: var(--surface-strong);
+}
+td {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+tbody tr:first-child td:first-child,
+tbody tr td:first-child {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+tbody tr:hover td {
+  background: var(--accent-soft);
+}
+
+/* --------- 3-6. toc ---------
+   build.py: <ul class="toc"><li class="toc-item"><span/><span/></li>...</ul>
+   번호 + 제목 + 페이지
+*/
+.toc {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+  counter-reset: toc-step;
+}
+.toc-item {
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  align-items: center;
+  gap: var(--gap-md);
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  border-radius: 0;
+  counter-increment: toc-step;
+  transition: background 180ms ease, padding 180ms ease;
+}
+.toc-item:first-child {
+  border-top: 1px solid var(--border);
+}
+.toc-item:hover {
+  background: var(--surface);
+  padding-left: 32px;
+}
+.toc-item::before {
+  content: counter(toc-step, decimal-leading-zero);
+  color: var(--accent);
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+.toc-item span:first-of-type {
+  color: var(--text-primary);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.toc-item span:last-of-type {
+  color: var(--text-muted);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+/* --------- 3-7. checklist ---------
+   build.py: <ul class="checklist"><li class="check-item">{text}</li>...</ul>
+*/
+.checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--component-gap);
+  text-align: left;
+}
+.check-item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 20px 14px 48px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 21px;
+  font-weight: 500;
+  line-height: 1.55;
+}
+.check-item::before {
+  content: "";
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-soft);
+}
+.check-item::after {
+  content: "";
+  position: absolute;
+  left: 23px;
+  top: 50%;
+  transform: translateY(-65%) rotate(45deg);
+  width: 4px;
+  height: 8px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+}
+
+/* --------- 3-8. timeline ---------
+   build.py: <div class="timeline"><div class="timeline-item"><strong/><span/></div>...</div>
+   세로 timeline — dot + line
+*/
+.timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--component-gap);
+  padding-left: 42px;
+  text-align: left;
+}
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 12px;
+  bottom: 12px;
+  width: 2px;
+  background: var(--border);
+}
+.timeline-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  padding: var(--gap-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-soft);
+}
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  left: -42px;
+  top: 42px;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-pill);
+  background: var(--bg);
+  border: 2px solid var(--border);
+}
+.timeline-item:last-child::before {
+  border-color: var(--accent);
+  background: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-soft);
+}
+.timeline-item strong {
+  color: var(--accent);
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.timeline-item span {
+  color: var(--text-primary);
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+/* --------- 3-9. map ---------
+   build.py: <div class="map"><div class="box"><strong/><span/></div>...</div>
+   첫 항목을 핵심 노드로, 나머지를 주변 노드로 시각화
+*/
+.map {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  grid-auto-rows: min-content;
+  align-content: center;
+  gap: var(--component-gap);
+}
+.map .box {
+  display: flex;
+  flex-direction: column;
+  gap: var(--card-inner-gap);
+  padding: var(--gap-lg);
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
+}
+.map .box strong {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+.map .box span {
+  font-size: 19px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+/* --------- 3-10. banner ---------
+   build.py: <div class="banner"> 또는 <div class="banner info|warn">{text}</div>
+*/
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-sm);
+  width: min(860px, 100%);
+  margin-inline: auto;
+  padding: 18px 28px;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-line);
+  border-radius: var(--radius-pill);
+  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.5;
+  text-align: center;
+  box-shadow: var(--shadow-soft);
+}
+.banner::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.18);
+}
+.banner.info {
+  background: var(--accent-soft);
+  border-color: var(--accent-line);
+}
+.banner.warn {
+  background: rgba(234, 179, 8, 0.10);
+  border-color: rgba(234, 179, 8, 0.28);
+}
+.banner.warn::before {
+  background: #eab308;
+  box-shadow: 0 0 0 4px rgba(234, 179, 8, 0.18);
+}
+
+/* --------- 3-11. summary ---------
+   build.py: <div class="summary"><p>{text}</p></div>
+   요약 카드 (강한 위계)
+*/
+.summary {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: min(920px, 100%);
+  margin-inline: auto;
+  padding: var(--gap-lg) var(--gap-xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+.summary p {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: clamp(25px, 2.5vw, 31px);
+  font-weight: 700;
+  line-height: 1.45;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+/* --------- 3-12. image ---------
+   build.py: <div class="image-frame"><img src/></div> 또는 placeholder
+*/
+.image-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
+  padding: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  position: relative;
+}
+.image-frame:empty::before,
+.image-frame[aria-label]:not(:has(img))::before {
+  content: "Image";
+  color: var(--text-muted);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.image-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --------- 3-13. source ---------
+   build.py: <div class="source">{text}</div>
+*/
+.source {
+  padding-top: 8px;
+  color: var(--text-muted);
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.55;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+/* --------- 3-14. video ---------
+   build.py: <div class="video-frame"><video src/></div> 또는 placeholder
+   placeholder 시 중앙 play button 표시
+*/
+.video-frame {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+.video-frame::before {
+  content: "";
+  position: absolute;
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-pill);
+  background: var(--text-primary);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+  z-index: 1;
+}
+.video-frame::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 18px solid #fff;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  transform: translateX(3px);
+  z-index: 2;
+}
+.video-frame:has(video[src]:not([src=""]))::before,
+.video-frame:has(video[src]:not([src=""]))::after {
+  display: none;
+}
+.video-frame video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --------- 3-15. cta ---------
+   build.py: <a class="cta" href>{text}</a>
+   stage 직계 자식 — align-self로 가운데 정렬
+*/
+.cta {
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 62px;
+  padding: 19px 42px;
+  background: var(--text-primary);
+  color: #ffffff;
+  border: 1px solid var(--text-primary);
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  line-height: 1;
+  box-shadow: var(--shadow-card);
+  transition: transform 180ms ease, box-shadow 180ms ease,
+    background 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+.cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.16);
+}
+.cta + .cta {
+  background: var(--surface);
+  color: var(--text-primary);
+  border-color: var(--border);
+  box-shadow: var(--shadow-soft);
+}
+.cta + .cta:hover {
+  border-color: var(--text-primary);
+  background: var(--surface-strong);
+}
+
+/* --------- 3-16. keyMessage ---------
+   build.py: <div class="key-message">{message}</div>
+*/
+.key-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(980px, 100%);
+  min-height: 0;
+  margin-inline: auto;
+  color: var(--text-primary);
+  font-size: clamp(54px, 6.2vw, 86px);
+  line-height: 1.08;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  text-align: center;
+  text-wrap: balance;
+}
+.key-message::first-line {
+  /* 첫 줄을 시각적 무게 강조 (선택적) */
+}
+
+/* ============================================================ */
+/*  4. 특수 슬라이드 (cover / sectionDivider / qna)              */
+/* ============================================================ */
+.divider {
+  background: linear-gradient(180deg, var(--surface-strong), var(--bg));
+}
+.divider .chapter {
+  display: inline-block;
+  padding: 6px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  box-shadow: var(--shadow-soft);
+}
+
+.cover-meta {
+  color: var(--text-muted);
+}
+
+/* ============================================================ */
+/*  5. Responsive                                                */
+/* ============================================================ */
+@media (max-width: 980px) {
+  .cards,
+  .flow {
+    grid-template-columns: 1fr;
+  }
+  .flow .node:not(:last-child)::after {
+    display: none;
+  }
+  .split {
+    grid-template-columns: 1fr;
+  }
+  .toc-item {
+    grid-template-columns: 36px 1fr auto;
+    gap: var(--gap-sm);
+  }
+}
+
+@media (max-width: 760px) {
+  :root {
+    --slide-pad-x: 24px;
+    --slide-pad-y: 64px;
+    --stage-row-gap: 18px;
+  }
+  h1,
+  .key-message {
+    font-size: clamp(40px, 12vw, 56px);
+  }
+  h2 {
+    font-size: clamp(30px, 8vw, 40px);
+  }
+  .cta {
+    width: min(100%, 320px);
+  }
+}

@@ -1,0 +1,49 @@
+/* 문서 공통 A4 셸 CSS.
+   문서별 폰트, 색상, 카드 스타일은 여기 두지 않는다. */
+
+/* ── 하드 페이지 물리 규격 ── */
+.page {
+    box-sizing: border-box;
+    width: 210mm;
+    height: 297mm;
+    /* 문서별 여백이 필요하면 내부 CSS에서 .page padding만 덮어쓴다. */
+    padding: 20mm;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    margin: 0 auto;
+    page-break-after: always;
+    break-after: page;
+}
+.page:last-child {
+    page-break-after: avoid;
+    break-after: avoid;
+}
+
+@media print {
+    @page { size: A4; margin: 0; }
+    body { 
+        /* 문서 배경색/배경이미지 출력 강제 */
+        -webkit-print-color-adjust: exact !important; 
+        print-color-adjust: exact !important; 
+    }
+    .page { margin: 0; box-shadow: none; border: none; }
+}
+
+@media screen {
+    /* 브라우저 미리보기용 공통 배경 */
+    body { background: #F1F5F9; }
+    .page { margin: 20px auto; box-shadow: 0 2px 12px rgba(0,0,0,0.1); }
+}
+
+/* 절단 방지 유틸리티 */
+.avoid-break {
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+.page-break-before {
+    page-break-before: always;
+    break-before: page;
+}

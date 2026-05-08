@@ -1,0 +1,58 @@
+{
+    "title": "{DOMAIN} 샘플 문서",
+
+    "style": {
+        "accent": "#1E3A5F",
+        "accent-light": "#EFF6FF",
+        "text-dark": "#1F2937",
+        "font-size-body": "15px",
+        "line-height": "1.6",
+        "page-margin": "22mm 20mm 20mm"
+    },
+
+    "sections": [
+        "intro",
+        "overview",
+        "terms",
+        "---",
+        "cost",
+        "sign"
+    ],
+
+    "intro": {
+        "type": "text",
+        "title": "1. 서론",
+        "content": "이 문서는 {DOMAIN} 엔진이 정상 동작하는지 확인하기 위한 샘플입니다.\n\n이 JSON을 실제 내용으로 바꾸면 새 문서가 완성됩니다."
+    },
+
+    "overview": {
+        "type": "text",
+        "title": "2. 개요",
+        "content": "여기에 {DOMAIN} 문서 개요를 작성합니다. 단락은 빈 줄(\\n\\n)로 구분됩니다.\n\n두 번째 단락 예시."
+    },
+
+    "terms": {
+        "type": "text",
+        "title": "3. 주요 내용",
+        "content": "본문 내용. 필요 시 table, signature 등의 파츠를 추가할 수 있습니다."
+    },
+
+    "cost": {
+        "type": "table",
+        "title": "비용 내역 (샘플)",
+        "headers": ["항목", "내용", "금액"],
+        "rows": [
+            ["인건비", "설계 및 개발", "5,000,000"],
+            ["재료비", "부자재", "1,200,000"],
+            ["기타", "운영비", "800,000"]
+        ]
+    },
+
+    "sign": {
+        "type": "signature",
+        "parties": [
+            { "role": "갑", "fields": ["회사명", "대표자", "서명"] },
+            { "role": "을", "fields": ["성명", "주소", "서명"] }
+        ]
+    }
+}

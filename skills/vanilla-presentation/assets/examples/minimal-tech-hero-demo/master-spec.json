@@ -1,0 +1,233 @@
+{
+  "deck": "Minimal Tech Hero Gallery",
+  "theme": "minimal-tech-hero",
+  "grid": { "cols": 4, "stepW": 1320, "stepH": 820 },
+  "slides": [
+    {
+      "id": "cover",
+      "type": "cover",
+      "kicker": "COMPONENT MASTER",
+      "title": "Minimal Tech Hero Gallery",
+      "subtitle": "밝은 미니멀 기술 서비스 톤의 컴포넌트 전수 가이드",
+      "presenter": "jung"
+    },
+    {
+      "id": "s-toc",
+      "title": "01. TOC (목차)",
+      "lead": "발표의 전체 구조를 보여주는 컴포넌트입니다.",
+      "components": [
+        {
+          "type": "toc",
+          "items": [
+            { "title": "서론: 비즈니스 현황", "page": "03" },
+            { "title": "본론: 핵심 전략", "page": "08" },
+            { "title": "결론: 향후 계획", "page": "15" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s-cards",
+      "title": "02. Cards (카드)",
+      "lead": "병렬적인 항목들을 그리드 형태로 나열할 때 사용합니다.",
+      "components": [
+        {
+          "type": "cards",
+          "items": [
+            { "title": "항목 A", "desc": "상세 설명을 한 줄 또는 두 줄로 작성합니다." },
+            { "title": "항목 B", "desc": "상세 설명을 한 줄 또는 두 줄로 작성합니다." },
+            { "title": "항목 C", "desc": "상세 설명을 한 줄 또는 두 줄로 작성합니다." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s-checklist",
+      "title": "03. Checklist (체크리스트)",
+      "lead": "점검 항목이나 주요 특징을 불렛 포인트로 나열합니다.",
+      "components": [
+        {
+          "type": "checklist",
+          "items": [
+            { "text": "첫 번째 핵심 준수 사항" },
+            { "text": "두 번째 데이터 보안 원칙" },
+            { "text": "세 번째 운영 효율화 방안" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s-flow",
+      "title": "04. Flow (흐름도)",
+      "lead": "순차적인 프로세스나 단계를 화살표 방향으로 표현합니다.",
+      "components": [
+        {
+          "type": "flow",
+          "items": [
+            { "title": "분석", "desc": "현상 파악 및 데이터 수집" },
+            { "title": "설계", "desc": "해결책 도출 및 시스템 설계" },
+            { "title": "실행", "desc": "실제 적용 및 모니터링" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s-contract",
+      "title": "05. Contract (다단 노드)",
+      "lead": "비교나 분류된 항목들을 박스 형태로 보여줍니다.",
+      "components": [
+        {
+          "type": "contract",
+          "items": [
+            { "title": "표준형", "desc": "가장 기본적인 비즈니스 옵션" },
+            { "title": "프리미엄", "desc": "확장성과 커스텀이 강화된 옵션" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s-table",
+      "title": "06. Table (표)",
+      "lead": "정량적인 수치나 복잡한 데이터를 표 형식으로 정리합니다.",
+      "components": [
+        {
+          "type": "table",
+          "headers": ["구분", "2023 실적", "2024 목표", "상태"],
+          "rows": [
+            ["매출액", "5.2억", "7.0억", "상승"],
+            ["영업이익", "1.1억", "1.5억", "안정"]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s-timeline",
+      "title": "07. Timeline (타임라인)",
+      "lead": "시간의 흐름에 따른 주요 이정표(Milestone)를 표시합니다.",
+      "components": [
+        {
+          "type": "timeline",
+          "items": [
+            { "date": "2024.01", "desc": "프로젝트 킥오프" },
+            { "date": "2024.06", "desc": "MVP 개발 완료" },
+            { "date": "2024.12", "desc": "정식 서비스 런칭" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s-split",
+      "title": "08. Split (대비)",
+      "lead": "As-Is / To-Be 또는 장단점 등을 좌우로 대비시킵니다.",
+      "components": [
+        {
+          "type": "split",
+          "items": [
+            { "title": "As-Is", "desc": "수동 데이터 입력 및 관리" },
+            { "title": "To-Be", "desc": "AI 기반 자동화 시스템 도입" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s-map",
+      "title": "09. Map (영역 맵)",
+      "lead": "계층 구조나 영역별 구분을 박스 레이아웃으로 표현합니다.",
+      "components": [
+        {
+          "type": "map",
+          "items": [
+            { "title": "인프라", "desc": "클라우드 및 데이터베이스" },
+            { "title": "어플리케이션", "desc": "사용자 인터페이스 및 로직" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "s-key",
+      "title": "10. Key Message (핵심 메시지)",
+      "lead": "가장 중요한 한 문장을 거대하게 강조합니다.",
+      "components": [
+        {
+          "type": "keyMessage",
+          "message": "데이터는 거짓말을 하지 않으며, 디자인은 신뢰를 만듭니다."
+        }
+      ]
+    },
+    {
+      "id": "s-banner",
+      "title": "11. Banner (안내 배너)",
+      "lead": "주의, 경고, 팁 등의 부가 정보를 강조된 박스에 담습니다.",
+      "components": [
+        {
+          "type": "banner",
+          "text": "본 슬라이드 디자인은 모든 브라우저에서 동일하게 유지됩니다.",
+          "style": "info"
+        },
+        {
+          "type": "banner",
+          "text": "반드시 최신 빌드 스크립트를 사용해야 레이아웃이 깨지지 않습니다.",
+          "style": "warn"
+        }
+      ]
+    },
+    {
+      "id": "s-summary",
+      "title": "12. Summary (요약)",
+      "lead": "슬라이드의 결론이나 요약을 강조된 선과 함께 박스로 보여줍니다.",
+      "components": [
+        {
+          "type": "summary",
+          "text": "결론적으로 본 프레임워크는 제작 속도와 시각적 품질을 동시에 보장합니다."
+        }
+      ]
+    },
+    {
+      "id": "s-cta",
+      "title": "13. CTA (행동 유도)",
+      "lead": "발표 끝에 사용자의 다음 행동을 유도하는 버튼을 배치합니다.",
+      "components": [
+        {
+          "type": "cta",
+          "text": "제안서 다운로드",
+          "href": "#"
+        }
+      ]
+    },
+    {
+      "id": "s-source",
+      "title": "14. Source (출처)",
+      "lead": "데이터나 인용구의 출처를 작고 정갈하게 표기합니다.",
+      "components": [
+        {
+          "type": "source",
+          "text": "출처: 예시 데이터셋"
+        }
+      ]
+    },
+    {
+      "id": "s-image",
+      "title": "15. Image (이미지 프레임)",
+      "lead": "이미지를 정해진 프레임 안에 깔끔하게 배치합니다.",
+      "components": [
+        {
+          "type": "image",
+          "src": "",
+          "alt": "Example Image"
+        }
+      ]
+    },
+    {
+      "id": "s-video",
+      "title": "16. Video (영상 프레임)",
+      "lead": "영상을 배경이나 콘텐츠로 활용하는 프레임을 제공합니다.",
+      "components": [
+        {
+          "type": "video",
+          "src": "",
+          "controls": true
+        }
+      ]
+    }
+  ]
+}
