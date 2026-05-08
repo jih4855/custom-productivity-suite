@@ -87,6 +87,54 @@ body {
 }
 
 /* ============================================================ */
+/*  Overview mode — press O, click a slide, Esc to return          */
+/* ============================================================ */
+body.overview-mode {
+  overflow: auto;
+}
+
+body.overview-mode #presentation {
+  position: relative;
+  inset: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+  min-height: 100vh;
+  padding: 28px;
+  box-sizing: border-box;
+  transform: none !important;
+  overflow: visible;
+}
+
+body.overview-mode .step {
+  position: relative;
+  top: auto;
+  left: auto;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  margin: 0;
+  padding: 24px;
+  opacity: 1 !important;
+  pointer-events: auto;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 10px 32px rgba(15, 23, 42, 0.08);
+  transform: none !important;
+}
+
+body.overview-mode .step.active {
+  outline: 3px solid var(--blue, #0066cc);
+  outline-offset: 2px;
+}
+
+body.overview-mode .stage {
+  row-gap: 12px;
+}
+
+/* ============================================================ */
 /*  Stage frame — 5층 고정 그리드                                 */
 /*    1: header(.kicker)                                         */
 /*    2: title  (h1 또는 h2)                                      */
