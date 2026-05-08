@@ -23,7 +23,7 @@
 `skills/vanilla-presentation/`은 외부 프레젠테이션 라이브러리 없이 HTML/CSS/JS만으로 발표 자료를 만드는 스킬입니다.
 
 - JSON 스펙에서 발표 HTML 생성
-- `minimal-tech-hero` 단일 템플릿 기반 슬라이드 레이아웃
+- `minimal-tech-hero`를 레퍼런스로 삼아 사용자 맞춤형 `theme.css` 작성
 - 좌우 방향키만 사용하는 단순 프레젠테이션 엔진
 - `index.html`, `base.css`, `theme.css`, `engine.js` 4개 파일 묶음으로 실행 가능한 포터블 발표 자료 생성
 
