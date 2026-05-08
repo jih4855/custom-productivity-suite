@@ -237,7 +237,7 @@ def render_slide(slide, index, total, layout):
     # ── 일반 타입: .stage 5층 그리드 ───────────────
     else:
         kicker_text  = text(slide.get("kicker"))
-        title_tag    = "h1" if stype == "cover" else "h2"
+        title_tag    = "h2"
         title_text   = text(slide.get("title"))
         lead_text    = text(slide.get("lead"))
         components   = slide.get("components", [])
