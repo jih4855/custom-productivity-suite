@@ -88,6 +88,7 @@ PPT 전체가 "한 문서"로 보이려면 **프레임이 모든 슬라이드에
    ```bash
    python3 <suite-root>/skills/vanilla-presentation/assets/build.py \
      -s <workspace>/projects/<deck-name>/spec.json \
+     -t <테마명> \
      -o <workspace>/projects/<deck-name>/index.html
    ```
 3. 생성된 `<workspace>/projects/<deck-name>/theme.css`를 사용자 요청과 레퍼런스에 맞게 수정한다.
@@ -108,7 +109,6 @@ PPT 전체가 "한 문서"로 보이려면 **프레임이 모든 슬라이드에
 ```json
 {
   "deck": "발표 제목",
-  "theme": "minimal-tech-hero",
   "layout": { "stepW": 1320 },
   "slides": [
     {
