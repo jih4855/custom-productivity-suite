@@ -75,24 +75,6 @@ body {
   text-align: center;
 }
 
-/* sidebar 톤 다운 */
-.sidebar {
-  background: transparent;
-  border-right: 0;
-  box-shadow: none;
-  backdrop-filter: none;
-}
-.sidebar:hover {
-  background: var(--surface-strong);
-  box-shadow: var(--shadow-soft);
-  border-right: 1px solid var(--border);
-}
-.sidebar-item.active {
-  background: var(--accent-soft);
-  border-left-color: var(--accent);
-  color: var(--accent);
-}
-
 /* stage 텍스트 중앙 */
 .stage {
   width: min(var(--stage-w), 100%);
@@ -578,16 +560,18 @@ tbody tr:hover td {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: var(--component-gap);
-  padding-left: 42px;
+  gap: 18px;
+  padding-left: 34px;
   text-align: left;
+  max-height: 100%;
+  overflow: hidden;
 }
 .timeline::before {
   content: "";
   position: absolute;
   left: 10px;
-  top: 12px;
-  bottom: 12px;
+  top: 10px;
+  bottom: 10px;
   width: 2px;
   background: var(--border);
 }
@@ -595,8 +579,8 @@ tbody tr:hover td {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
-  padding: var(--gap-lg);
+  gap: 8px;
+  padding: 20px 24px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -605,10 +589,10 @@ tbody tr:hover td {
 .timeline-item::before {
   content: "";
   position: absolute;
-  left: -42px;
-  top: 42px;
-  width: 22px;
-  height: 22px;
+  left: -33px;
+  top: 24px;
+  width: 18px;
+  height: 18px;
   border-radius: var(--radius-pill);
   background: var(--bg);
   border: 2px solid var(--border);
@@ -620,16 +604,16 @@ tbody tr:hover td {
 }
 .timeline-item strong {
   color: var(--accent);
-  font-size: 17px;
+  font-size: 14px;
   font-weight: 800;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 .timeline-item span {
   color: var(--text-primary);
-  font-size: 21px;
+  font-size: 17px;
   font-weight: 600;
-  line-height: 1.5;
+  line-height: 1.35;
 }
 
 /* --------- 3-9. map ---------

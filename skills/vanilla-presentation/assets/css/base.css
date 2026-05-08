@@ -1,6 +1,6 @@
 /*
  * base.css — 프레임 고정 책임 (SKILL.md §0.9 참고)
- * - 슬라이드 셸(.step), 캔버스(#presentation), 사이드바 내비게이션
+ * - 슬라이드 셸(.step), 캔버스(#presentation)
  * - .stage 의 5층 그리드: header / title / lead / content / footer
  * - 자식의 row 자동 매핑(.kicker → 1, h1/h2 → 2, .lead → 3, 본문 → 4, 푸터 → 5)
  * 디자인(색·폰트·border·padding 내부)은 테마 CSS의 책임이다.
@@ -87,54 +87,6 @@ body {
 }
 
 /* ============================================================ */
-/*  Overview mode — press O, click a slide, Esc to return          */
-/* ============================================================ */
-body.overview-mode {
-  overflow: auto;
-}
-
-body.overview-mode #presentation {
-  position: relative;
-  inset: auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 18px;
-  min-height: 100vh;
-  padding: 28px;
-  box-sizing: border-box;
-  transform: none !important;
-  overflow: visible;
-}
-
-body.overview-mode .step {
-  position: relative;
-  top: auto;
-  left: auto;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 16 / 9;
-  margin: 0;
-  padding: 24px;
-  opacity: 1 !important;
-  pointer-events: auto;
-  overflow: hidden;
-  cursor: pointer;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  box-shadow: 0 10px 32px rgba(15, 23, 42, 0.08);
-  transform: none !important;
-}
-
-body.overview-mode .step.active {
-  outline: 3px solid var(--blue, #0066cc);
-  outline-offset: 2px;
-}
-
-body.overview-mode .stage {
-  row-gap: 12px;
-}
-
-/* ============================================================ */
 /*  Stage frame — 5층 고정 그리드                                 */
 /*    1: header(.kicker)                                         */
 /*    2: title  (h1 또는 h2)                                      */
@@ -203,71 +155,6 @@ body.overview-mode .stage {
   .footnote,
   .cta) {
   flex: 0 0 auto;
-}
-
-/* ============================================================ */
-/*  Sidebar Navigation Rail                                      */
-/* ============================================================ */
-.sidebar {
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  /* 평소에는 실선처럼 보임 */
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(25px);
-  z-index: 2000;
-  transition: width 0.3s cubic-bezier(.16, 1, .3, 1), opacity 0.3s;
-  display: flex;
-  flex-direction: column;
-  padding: 60px 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  border-right: 1px solid var(--line);
-  opacity: 0.1;
-  /* 거의 안 보이다가 호버 시 나타남 */
-}
-
-.sidebar:hover {
-  width: 280px;
-  opacity: 1;
-  box-shadow: 10px 0 50px rgba(0, 0, 0, 0.08);
-}
-
-.sidebar-item {
-  padding: 14px 24px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  white-space: nowrap;
-  transition: background 0.2s, color 0.2s;
-  border-left: 4px solid transparent;
-}
-
-.sidebar-item:hover {
-  background: var(--bg-sub);
-}
-
-.sidebar-item.active {
-  background: rgba(0, 102, 204, 0.05);
-  border-left-color: var(--blue, #0066cc);
-  color: var(--blue, #0066cc);
-  font-weight: 700;
-}
-
-.sidebar-item .num {
-  font-size: 11px;
-  font-weight: 800;
-  color: var(--muted);
-  width: 20px;
-}
-
-.sidebar-item .title {
-  font-size: 14px;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 /* ============================================================ */

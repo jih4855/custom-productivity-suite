@@ -23,8 +23,8 @@
 `skills/vanilla-presentation/`은 외부 프레젠테이션 라이브러리 없이 HTML/CSS/JS만으로 발표 자료를 만드는 스킬입니다.
 
 - JSON 스펙에서 발표 HTML 생성
-- 고정 프레임 기반 슬라이드 레이아웃
-- 테마 CSS와 내비게이션 엔진 분리
+- `minimal-tech-hero` 단일 템플릿 기반 슬라이드 레이아웃
+- 좌우 방향키만 사용하는 단순 프레젠테이션 엔진
 - `index.html`, `base.css`, `theme.css`, `engine.js` 4개 파일 묶음으로 실행 가능한 포터블 발표 자료 생성
 
 ## 제작 원칙 (Core Principles)
@@ -42,8 +42,7 @@ python3 skills/html-to-a4-pdf/assets/convert.py input.html -o output.pdf
 
 # 프레젠테이션 빌드
 python3 skills/vanilla-presentation/assets/build.py \
-  -s skills/vanilla-presentation/assets/examples/normal-style/master-spec.json \
-  -t normal-style \
+  -s skills/vanilla-presentation/assets/examples/minimal-tech-hero-demo/master-spec.json \
   -o preview/index.html
 ```
 

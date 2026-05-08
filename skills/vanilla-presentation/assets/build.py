@@ -193,15 +193,10 @@ def render_component(comp):
 # 슬라이드 렌더러
 # ─────────────────────────────────────────
 
-def render_slide(slide, index, total, grid):
-    cols  = grid.get("cols",  3)
-    stepW = grid.get("stepW", 1320)
-    stepH = grid.get("stepH", 820)
-
-    col = index % cols
-    row = index // cols
-    x   = col * stepW
-    y   = row * stepH
+def render_slide(slide, index, total, layout):
+    stepW = layout.get("stepW", 1320)
+    x = index * stepW
+    y = 0
 
     stype = slide.get("type")
     sid   = attr(slide.get("id", f"s{index+1}"))
@@ -283,7 +278,7 @@ def render_slide(slide, index, total, grid):
 # 빌더 메인
 # ─────────────────────────────────────────
 
-def build(spec_path: str, theme: str, out_path: str, grid_override: dict):
+def build(spec_path: str, theme: str, out_path: str, layout_override: dict):
     # build.py 자신의 위치를 기준으로 스킬 폴더 경로 자동 계산
     skill_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -293,12 +288,14 @@ def build(spec_path: str, theme: str, out_path: str, grid_override: dict):
 
     slides = data.get("slides", [])
 
-    # 2. 그리드: JSON이 기본, CLI 인자로 덮어쓰기
-    grid = data.get("grid", {"cols": 3, "stepW": 1320, "stepH": 820})
-    grid.update({k: v for k, v in grid_override.items() if v is not None})
+    # 2. 레이아웃: PPT처럼 좌우로만 이동한다.
+    layout = data.get("layout", {"stepW": 1320})
+    if "grid" in data:
+        layout["stepW"] = data["grid"].get("stepW", layout["stepW"])
+    layout.update({k: v for k, v in layout_override.items() if v is not None})
 
     # 3. 슬라이드 렌더링
-    slides_html = "".join(render_slide(s, i, len(slides), grid) for i, s in enumerate(slides))
+    slides_html = "".join(render_slide(s, i, len(slides), layout) for i, s in enumerate(slides))
 
     # 4. 외부 에셋 복사 및 경로 설정
     out_dir = os.path.dirname(os.path.abspath(out_path))
@@ -318,14 +315,7 @@ def build(spec_path: str, theme: str, out_path: str, grid_override: dict):
     shutil.copy2(theme_css_src, os.path.join(out_dir, "theme.css"))
     shutil.copy2(engine_js_src, os.path.join(out_dir, "engine.js"))
 
-    # 5. 사이드바 네비게이션 생성
-    sidebar_html = '<div class="sidebar">'
-    for i, slide in enumerate(slides):
-        stitle = text(slide.get("title", f"Slide {i+1}"))
-        sidebar_html += f'<div class="sidebar-item" data-index="{i}"><span class="num">{i+1}</span><span class="title">{stitle}</span></div>'
-    sidebar_html += '</div>'
-
-    # 6. 최종 HTML 조립 (외부 파일 링크 방식)
+    # 5. 최종 HTML 조립 (외부 파일 링크 방식)
     final_html = f"""<!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -335,7 +325,6 @@ def build(spec_path: str, theme: str, out_path: str, grid_override: dict):
     <link rel="stylesheet" href="theme.css">
 </head>
 <body>
-    {sidebar_html}
     <div id="presentation">
         {slides_html}
     </div>
@@ -344,7 +333,7 @@ def build(spec_path: str, theme: str, out_path: str, grid_override: dict):
 </html>
 """
 
-    # 7. 파일 저장
+    # 6. 파일 저장
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(final_html)
     print(f"[완료] {out_path} 및 외부 에셋(CSS, JS) 생성 완료 (테마: {theme}, 슬라이드: {len(slides)}장)")
@@ -361,9 +350,9 @@ if __name__ == "__main__":
         epilog="""
 예시:
   python3 build.py                                  # 기본 실행
-  python3 build.py -s spec.json -t minimal-tech-hero # 테마 교체
-  python3 build.py --cols 4 --stepW 1440            # 그리드 덮어쓰기
-  python3 build.py -s spec.json -t normal-style -o result.html --cols 3
+  python3 build.py
+  python3 build.py -s spec.json -o result.html
+  python3 build.py --stepW 1440
         """
     )
 
@@ -374,8 +363,8 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "-t", "--theme",
-        default="normal-style",
-        help="templates/ 폴더 안 테마 파일명 — 확장자(.css) 제외 (기본: normal-style)"
+        default="minimal-tech-hero",
+        help="templates/ 폴더 안 테마 파일명 — 확장자(.css) 제외 (기본: minimal-tech-hero)"
     )
     parser.add_argument(
         "-o", "--out",
@@ -383,22 +372,10 @@ if __name__ == "__main__":
         help="출력 HTML 파일명 (기본: index.html)"
     )
     parser.add_argument(
-        "--cols",
-        type=int,
-        default=None,
-        help="그리드 열 수 — JSON의 grid.cols 를 덮어씀"
-    )
-    parser.add_argument(
         "--stepW",
         type=int,
         default=None,
-        help="슬라이드 가로 간격(px) — JSON의 grid.stepW 를 덮어씀"
-    )
-    parser.add_argument(
-        "--stepH",
-        type=int,
-        default=None,
-        help="슬라이드 세로 간격(px) — JSON의 grid.stepH 를 덮어씀"
+        help="슬라이드 가로 간격(px) — JSON의 layout.stepW 를 덮어씀"
     )
 
     args = parser.parse_args()
@@ -407,5 +384,5 @@ if __name__ == "__main__":
         spec_path=args.spec,
         theme=args.theme,
         out_path=args.out,
-        grid_override={"cols": args.cols, "stepW": args.stepW, "stepH": args.stepH},
+        layout_override={"stepW": args.stepW},
     )

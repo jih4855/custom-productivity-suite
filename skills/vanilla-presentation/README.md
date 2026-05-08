@@ -16,9 +16,9 @@ vanilla-presentation/
 │   ├── css/
 │   │   └── base.css      # 모든 슬라이드의 공통 레이아웃 프레임 정의
 │   ├── js/
-│   │   └── engine.js     # 슬라이드 내비게이션 및 엔진 로직
+│   │   └── engine.js     # 좌우 방향키 슬라이드 내비게이션
 │   ├── templates/
-│   │   └── *.css         # 공식 테마 카탈로그 (normal-style.css 등)
+│   │   └── minimal-tech-hero.css
 │   └── examples/
 │       └── */            # 테마별 전수 컴포넌트 시각적 가이드 (index.html)
 ├── SKILL.md              # AI 에이전트 전용 상세 작동 명세서
@@ -36,9 +36,9 @@ vanilla-presentation/
 1.  `spec.json`을 작성하여 슬라이드 내용과 구조를 정의합니다.
 2.  아래 명령어를 실행하여 빌드합니다:
     ```bash
-    python3 assets/build.py -s <경로/spec.json> -t <테마명> -o <경로/index.html>
+    python3 assets/build.py -s <경로/spec.json> -o <경로/index.html>
     ```
 
 ## 커스터마이징 (Customization)
-- **자유로운 수정**: 이 시스템은 사용자의 요구에 맞춰 유연하게 수정할 수 있도록 설계되었습니다. `base.css`를 고쳐 프레임을 바꾸거나, 새로운 CSS를 `templates/`에 추가해 본인만의 브랜딩을 구축하세요.
+- **자유로운 수정**: 이 시스템은 사용자의 요구에 맞춰 유연하게 수정할 수 있도록 설계되었습니다. 기본 공개 템플릿은 `minimal-tech-hero` 하나만 유지하며, 필요하면 `theme.css`를 조정해 프로젝트별 톤을 맞춥니다.
 - **피드백 루프**: AI 에이전트에게 디자인 수정을 요청하면, 에이전트가 `SKILL.md` 지침에 따라 안전하게 반영합니다.

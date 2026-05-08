@@ -75,24 +75,6 @@ body {
   text-align: center;
 }
 
-/* sidebar 톤 다운 */
-.sidebar {
-  background: transparent;
-  border-right: 0;
-  box-shadow: none;
-  backdrop-filter: none;
-}
-.sidebar:hover {
-  background: var(--surface-strong);
-  box-shadow: var(--shadow-soft);
-  border-right: 1px solid var(--border);
-}
-.sidebar-item.active {
-  background: var(--accent-soft);
-  border-left-color: var(--accent);
-  color: var(--accent);
-}
-
 /* stage 텍스트 중앙 */
 .stage {
   width: min(var(--stage-w), 100%);

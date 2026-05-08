@@ -6,7 +6,7 @@ Custom Productivity Suite에 포함된 공개용 생산성 스킬 목록입니�
 
 ### 1. [Vanilla Presentation](skills/vanilla-presentation/README.md)
 - **목적**: 비즈니스 스타일 프레젠테이션 제작 시스템
-- **특징**: 순수 HTML/CSS/JS 기반, 고정 프레임 레이아웃, JSON 스펙 기반 빌드, 테마 카탈로그
+- **특징**: 순수 HTML/CSS/JS 기반, `minimal-tech-hero` 단일 템플릿, 좌우 방향키 이동, JSON 스펙 기반 빌드
 - **포트폴리오 포인트**: 발표 자료를 오피스 파일 수작업이 아니라 재현 가능한 웹 산출물로 생성
 - **운영 가이드**: [skills/vanilla-presentation/SKILL.md](skills/vanilla-presentation/SKILL.md)
 

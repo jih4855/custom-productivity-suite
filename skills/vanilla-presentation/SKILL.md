@@ -109,8 +109,8 @@ PPT 전체가 "한 문서"로 보이려면 **프레임이 모든 슬라이드에
 ```json
 {
   "deck": "발표 제목",
-  "theme": "normal-style",
-  "grid": { "cols": 3, "stepW": 1320, "stepH": 820 },
+  "theme": "minimal-tech-hero",
+  "layout": { "stepW": 1320 },
   "slides": [
     {
       "id": "s1",
@@ -175,7 +175,7 @@ PPT 전체가 "한 문서"로 보이려면 **프레임이 모든 슬라이드에
 
 ## 4. 테마 CSS 작성 가이드
 
-새 테마를 만들 때 **프레임(클래스명·HTML 구조)은 고정**, 디자인(색상·폰트·간격·장식)은 자유다.
+기본 공개 템플릿은 `minimal-tech-hero` 하나만 유지한다. 프레임(클래스명·HTML 구조)은 고정하고, 디자인(색상·폰트·간격·장식)은 `theme.css`에서 조정한다.
 
 > **테마 생성 시 주의사항 (전수 구현 원칙)**
 > 새로운 CSS 테마를 생성할 때는 나중에 어떤 컴포넌트를 꺼내 쓰더라도 디자인이 깨지지 않도록 **[§3.4 컴포넌트별 JSON 키 & CSS 클래스 매핑](#34-컴포넌트별-json-키--css-클래스-매핑)에 명시된 모든 컴포넌트 스타일을 반드시 포함해야 한다.**
@@ -200,12 +200,11 @@ PPT 전체가 "한 문서"로 보이려면 **프레임이 모든 슬라이드에
 - **전역 변수 활용**: `base.css`에 정의된 표준 간격 토큰(`--gap-xs`, `--gap-sm`, `--gap-md`, `--gap-lg`, `--gap-xl`)을 테마 CSS 전반에 일관되게 적용하여 전체 템플릿의 **비율과 통일감**을 유지한다.
 - **버튼 및 개별 요소 정렬**: `.cta` 같은 버튼 요소나 `.key-message` 등이 `.content`(flex-column) 안에서 불필요하게 늘어나거나(stretch) 서로 달라붙지 않도록 `align-self: center;` 와 `--gap` 변수를 통해 독립적인 숨쉴 공간을 반드시 확보한다.
 
-### 4.3 공식 테마 카탈로그
-현재 `templates/` 폴더에 등재된 공식 테마 목록입니다. 빌드 시 `-t <테마명>`으로 호출합니다.
+### 4.3 공식 테마
+현재 `templates/` 폴더에는 `minimal-tech-hero` 하나만 유지한다. 빌드 시 `-t`를 생략하면 이 테마가 기본 적용된다.
 
 | 테마명 | 디자인 컨셉 | 추천 용도 | 비주얼 |
 |---|---|---|---|
-| `normal-style` | Professional Business (Navy & White) | 기업 보고서, 제안서, 깔끔한 비즈니스 프리젠테이션 | [미리보기](./assets/examples/normal-style/index.html) |
 | `minimal-tech-hero` | Bright Minimal Technical Hero | 기술 서비스 소개, 미니멀 제품 랜딩, 중앙 정렬 히어로 | [미리보기](./assets/examples/minimal-tech-hero-demo/index.html) |
 
 ---
