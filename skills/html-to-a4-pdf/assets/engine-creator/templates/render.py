@@ -28,9 +28,13 @@ def find_upwards(start_dir: str, filename: str) -> str:
     """Find a shared asset by walking up from generated engine folders."""
     current = os.path.abspath(start_dir)
     while True:
-        candidate = os.path.join(current, filename)
-        if os.path.exists(candidate):
-            return candidate
+        candidates = [
+            os.path.join(current, filename),
+            os.path.join(current, "assets", filename),
+        ]
+        for candidate in candidates:
+            if os.path.exists(candidate):
+                return candidate
         parent = os.path.dirname(current)
         if parent == current:
             return ""

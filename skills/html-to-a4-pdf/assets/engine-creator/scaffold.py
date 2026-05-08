@@ -7,7 +7,7 @@ engine-creator · 새 문서 엔진 스캐폴더
     python scaffold.py 사업계획서
 
 동작:
-    html-to-a4-pdf/<도메인명>/ 폴더를 새로 만들고,
+    현재 작업 폴더에 <도메인명>/ 폴더를 새로 만들고,
     templates/ 내용을 복사하면서 {DOMAIN} placeholder를 치환한다.
 """
 
@@ -35,7 +35,8 @@ def scaffold(domain: str, force: bool = False):
 
     here = os.path.dirname(os.path.abspath(__file__))
     templates_dir = os.path.join(here, "templates")
-    target_root = os.path.abspath(os.path.join(here, "..", "..", domain))
+    shared_assets_dir = os.path.abspath(os.path.join(here, ".."))
+    target_root = os.path.abspath(domain)
 
     if os.path.exists(target_root):
         if not force:
@@ -66,6 +67,13 @@ def scaffold(domain: str, force: bool = False):
                     f.write(content)
             except UnicodeDecodeError:
                 shutil.copy2(src, dst)
+
+    # 생성된 엔진이 레포 밖에서도 독립적으로 PDF 변환까지 수행할 수 있게
+    # 공통 A4 셸과 변환기를 함께 복사한다.
+    for shared_name in ("a4-base.css", "convert.py"):
+        shared_src = os.path.join(shared_assets_dir, shared_name)
+        if os.path.exists(shared_src):
+            shutil.copy2(shared_src, os.path.join(target_root, shared_name))
 
     print(f"[완료] 엔진 생성: {target_root}")
     print(f"       → python {target_root}/render.py {target_root}/data.json --pdf --open")
