@@ -13,16 +13,16 @@
   --muted: #64748b;
   --line: #e2e8f0;
 
-  /* 슬라이드 셸 */
-  --slide-w: 100vw;
-  --slide-h: 100vh;
-  --slide-pad-x: clamp(54px, 8vw, 118px);
-  --slide-pad-y: clamp(44px, 7vh, 82px);
+  /* 슬라이드 셸 — 1280×720 고정 (PPT 표준)
+   * zoom으로 화면에 맞춰 확대. 글자·border가 또렷하게 렌더링됨. */
+  --slide-w: 1280px;
+  --slide-h: 720px;
+  --slide-pad-x: 60px;
+  --slide-pad-y: 44px;
 
   /* 본문(.stage) 프레임 */
   --stage-w: 1120px;
-  --stage-row-gap: clamp(24px, 3vh, 36px);
-  /* 전체적으로 여백을 더 시원하게 확장 */
+  --stage-row-gap: 28px;
 
   /* 표준 간격 (통일감을 위한 토큰) */
   --gap-xs: 8px;
@@ -45,17 +45,22 @@ body {
 }
 
 body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   opacity: 1;
 }
 
 /* ============================================================ */
-/*  Normal slide view                                            */
+/*  Normal slide view — 1280×720 고정 + zoom으로 화면에 맞춤      */
 /* ============================================================ */
 #presentation {
-  position: fixed;
-  inset: 0;
-  display: block;
+  position: relative;
+  width: var(--slide-w);
+  height: var(--slide-h);
+  zoom: var(--scale, 1);
   background: var(--bg);
+  overflow: hidden;
   transition: transform 0.7s cubic-bezier(.22, .61, .36, 1);
 }
 
@@ -86,6 +91,23 @@ body {
   z-index: 10;
 }
 
+/* 특수 슬라이드(cover/sectionDivider/qna)는 .step의 자식으로 직접 들어와
+   가용 영역(1280×720)을 풀로 채워야 한다. flex item의 main-axis 자동 축소 방지. */
+.step > :is(.cover, .divider, .qna) {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+/* 특수 슬라이드는 .step의 padding을 0으로 두어 풀스크린 디자인(그라디언트, 풀블리드 배경)이
+   .step의 패딩 영역까지 끊김 없이 이어지도록 한다.
+   각 테마 CSS(.cover, .divider, .qna)에서 자체적으로 padding을 설정하여 본문 안쪽 정렬을 책임진다. */
+.step--cover,
+.step--sectionDivider,
+.step--qna {
+  padding: 0;
+}
+
 /* ============================================================ */
 /*  Stage frame — 5층 고정 그리드                                 */
 /*    1: header(.kicker)                                         */
@@ -102,6 +124,8 @@ body {
   row-gap: var(--stage-row-gap);
   height: 100%;
   min-height: 0;
+  /* PPT는 한 슬라이드 한 화면. 컨텐츠가 720px을 넘으면 슬라이드를 쪼개거나 항목을 줄인다. */
+  overflow: hidden;
 }
 
 .stage>* {
@@ -132,20 +156,35 @@ body {
   min-height: 0;
 }
 
-/* image/video는 너무 크게 늘어나지 않도록 제한 */
-.stage> :is(.image-frame, .video-frame) {
+/* image: 콘텐츠 비율 유지하며 가운데 정렬, 너무 크게 늘어나지 않도록 제한 */
+.stage> .image-frame {
   display: flex;
   align-items: center;
   justify-content: center;
   max-height: 55vh;
   overflow: hidden;
 }
-
-.image-frame img,
-.video-frame video {
+.image-frame img {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+}
+
+/* video: 16:9 박스로 고정. 다른 컴포넌트(zoom 0.8 적용된 카드형)와 시각 비율을 맞추기 위해
+   명시적 720×405로 잡고 align-self/margin으로 가운데 정렬. zoom은 적용하지 않는다 (이중 축소 방지). */
+.stage> .video-frame {
+  width: 720px;
+  height: 405px;
+  max-width: 100%;
+  align-self: center;
+  margin-inline: auto;
+  overflow: hidden;
+}
+.video-frame video,
+.video-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
 }
 
 /* 푸터 컴포넌트는 자기 크기. 5층 마지막 자식으로 들어와야 한다. */
@@ -157,27 +196,5 @@ body {
   flex: 0 0 auto;
 }
 
-/* ============================================================ */
-/*  Compact viewport adjustments                                 */
-/* ============================================================ */
-@media (max-height: 760px) {
-  :root {
-    --slide-pad-x: clamp(42px, 6vw, 84px);
-    --slide-pad-y: clamp(32px, 5vh, 58px);
-    --stage-row-gap: clamp(10px, 1.4vh, 18px);
-  }
-
-  .step {
-    min-height: 0;
-  }
-}
-
-@media (max-width: 980px) {
-  :root {
-    --slide-pad-x: 32px;
-  }
-
-  .step {
-    overflow: auto;
-  }
-}
+/* 슬라이드는 1280×720 고정, zoom이 viewport 크기에 맞춰 확대하므로
+   별도의 media query 분기는 불필요. zoom이 모든 px을 비례 확대한다. */

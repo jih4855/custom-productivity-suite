@@ -1,3 +1,8 @@
+---
+name: html-to-a4-pdf
+description: HTML 문서를 하드 페이지 A4 기준 PDF로 변환하고, 반복 문서용 JSON+parts 엔진을 스캐폴딩하는 공개용 스킬입니다.
+---
+
 # HTML → A4 PDF 변환 스킬
 
 HTML 문서를 Chrome headless로 A4 PDF로 변환하는 공통 스킬입니다.
@@ -29,7 +34,6 @@ html-to-a4-pdf/
 │   │   ├── SKILL.md
 │   │   └── templates/
 │   └── requirements.txt
-├── README.md
 └── SKILL.md
 ```
 
@@ -150,5 +154,4 @@ convert_html_to_pdf("input.html", "output.pdf")
 
 ## 관련 문서
 
-- [README.md](README.md): 빠른 소개
 - [assets/engine-creator/SKILL.md](assets/engine-creator/SKILL.md): 엔진 생성 가이드

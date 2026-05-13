@@ -42,7 +42,8 @@ python3 skills/html-to-a4-pdf/assets/convert.py input.html -o output.pdf
 
 # 프레젠테이션 빌드
 python3 skills/vanilla-presentation/assets/build.py \
-  -s skills/vanilla-presentation/assets/examples/minimal-tech-hero-demo/master-spec.json \
+  -s skills/vanilla-presentation/example/master-spec.json \
+  -t flat-serif \
   -o preview/index.html
 ```
 

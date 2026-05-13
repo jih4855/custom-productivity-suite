@@ -1,11 +1,11 @@
 ---
 name: vanilla-presentation
-description: Vanilla JS와 CSS를 활용하여 외부 라이브러리 없이 세련된 비즈니스 스타일의 프리젠테이션을 제작할 때 참고하는 스킬 가이드입니다.
+description: Vanilla JS와 CSS를 활용하여 외부 라이브러리 없이 세련된 비즈니스 스타일의 프레젠테이션을 제작할 때 참고하는 스킬 가이드입니다.
 ---
 
 # Premium Vanilla Presentation Skill
 
-이 가이드는 무겁고 불안정한 외부 라이브러리를 배제하고, 순수 **Vanilla JS**와 CSS를 활용해 세련되고 모던한 화이트 톤의 SaaS 스타일 프리젠테이션을 구축하기 위한 **제작 원칙·워크플로우·시각 시스템**을 정리한 문서입니다.
+이 가이드는 무겁고 불안정한 외부 라이브러리를 배제하고, 순수 **Vanilla JS**와 CSS를 활용해 세련되고 모던한 SaaS 스타일 프레젠테이션을 구축하기 위한 **제작 원칙·워크플로우·시각 시스템**을 정리한 문서입니다.
 
 > [!IMPORTANT]
 > **0~3장(제작 원칙 / 폴더 구조 / 텍스트 원칙 / JSON 스펙)은 모든 발표 자료 작성에 선행되는 강제 규칙입니다.**
@@ -27,7 +27,7 @@ description: Vanilla JS와 CSS를 활용하여 외부 라이브러리 없이 세
 
 ### 0.3 JSON 스펙으로 구조 먼저, 내용은 나중에
 - 사용자에게 발표 대본·요지를 받으면, **먼저 JSON으로 슬라이드 구조 스펙을 작성**한다.
-- JSON에는 슬라이드별 `kicker`, `title`, `lead`(선택), `components`(cards / table / flow / map / contract / split / banner / image)와 이미지 경로 등을 명시한다.
+- JSON에는 슬라이드별 `kicker`, `title`, `lead`(선택), `components`(cards / table / flow / map / split / banner / image)와 이미지 경로 등을 명시한다.
 - JSON 구조가 확정된 뒤에야 HTML/CSS로 옮긴다.
 - JSON 템플릿은 [§3 JSON 스펙](#3-json-스펙으로-구조-잡기) 참고.
 
@@ -47,11 +47,16 @@ description: Vanilla JS와 CSS를 활용하여 외부 라이브러리 없이 세
 - 커스텀이 발생하면 **해당 deck 폴더 안에 `RULES.md`를 만들어 차이점을 기록**한다 (다음 세션에서 일관성 유지).
 
 ### 0.6 레퍼런스 기반 맞춤형 테마
-- `templates/minimal-tech-hero.css`는 **공식 완성 테마가 아니라 구현 예제**다. 어떤 클래스가 어떤 HTML 구조를 받고, 모든 컴포넌트를 어떻게 빠짐없이 그리는지 보여주는 단일 레퍼런스로 사용한다.
+- `assets/templates/` 폴더의 CSS 파일이 곧 레퍼런스 템플릿이다. 빌드 시 `-t <이름>`으로 선택하며, 생략하면 `minimal-tech-hero`가 폴백으로 적용된다.
+- 현재 제공 템플릿:
+  | 이름 | 스타일 | 추천 용도 |
+  |---|---|---|
+  | `minimal-tech-hero` | 밝은 미니멀, SaaS/AI 랜딩풍 | B2B 기술 발표, 제품 소개 |
+  | `flat-serif` | 명조체 제목, 플랫 디자인, 인디고 포인트 | 교육 자료, 용어집, 매거진 스타일 |
 - 새 발표를 만들 때는 사용자 요청, 레퍼런스 URL, 무드보드, 산업 톤을 바탕으로 **결과물 폴더의 `theme.css`를 맞춤형으로 작성**한다.
-- `-t`를 생략하면 `minimal-tech-hero`가 폴백으로 복사되지만, 이는 테스트 빌드와 구조 확인용이다. 실 발표 자료는 맞춤형 `theme.css`를 권장한다.
-- 맞춤형 테마 작성 시 `minimal-tech-hero.css`의 컴포넌트 커버리지를 기준으로 삼아 `cards`, `flow`, `table`, `timeline`, `banner`, `cta` 등 모든 지원 컴포넌트가 깨지지 않게 한다.
-- 결과물에서 검증된 테마가 반복 사용 가치가 있으면 `templates/<주제명>.css`로 회수해 재사용 가능한 템플릿으로 관리한다.
+- 맞춤형 테마 작성 시 기존 템플릿의 컴포넌트 커버리지를 기준으로 삼아 `cards`, `flow`, `table`, `timeline`, `banner`, `summary` 등 모든 지원 컴포넌트가 깨지지 않게 한다.
+- 결과물에서 검증된 테마가 반복 사용 가치가 있으면 `assets/templates/<주제명>.css`로 회수해 재사용 가능한 템플릿으로 관리한다.
+- **build.py는 순수 HTML 조립기**: 정적 HTML에 인라인 스타일을 넣지 않으며, 모든 시각 요소는 테마 CSS가 100% 책임진다. 단, 런타임 내비게이션 위치 계산은 `engine.js`가 담당한다.
 
 ### 0.7 슬라이드 한 장의 다섯 가지 핵심
 - **슬라이드 한 장의 다섯 가지 핵심**: 제목 / 메시지 / 시각 자료 / 근거 / 결론.
@@ -62,7 +67,12 @@ description: Vanilla JS와 CSS를 활용하여 외부 라이브러리 없이 세
 - 3개 이상의 컴포넌트가 필요하다면 슬라이드를 나누어 메시지를 분산한다.
 - 이는 프레젠테이션의 가독성과 시각적 집중도를 극대화하고, 레이아웃 붕괴를 원천 차단하기 위한 절대 원칙이다.
 
-### 0.9 프레임 고정 원칙 — "내용은 바꿔도 프레임은 흔들지 않는다"
+### 0.9 한 슬라이드 한 화면 (No Scroll)
+- **PPT는 한 슬라이드가 한 화면이다.** `.stage`는 `overflow: hidden`으로 720px 안에 컨텐츠를 가두며, 슬라이드 안에서 스크롤은 절대 허용하지 않는다.
+- 컨텐츠가 720px 안에 안 들어갈 것 같으면 **항목을 줄이거나 슬라이드를 쪼갠다.** timeline 노드 8개·표 10행 등은 시각 정보가 아니라 "낭독 거리"가 되며 PPT 본질에 어긋난다.
+- 같은 컴포넌트를 두 슬라이드로 나눠 흐름을 이어가는 게 한 슬라이드에 우겨넣는 것보다 항상 낫다.
+
+### 0.10 프레임 고정 원칙 — "내용은 바꿔도 프레임은 흔들지 않는다"
 PPT 전체가 "한 문서"로 보이려면 **프레임이 모든 슬라이드에서 같은 자리에 있어야** 한다. 슬라이드마다 디자인을 새로 만들지 말고, **고정 레이아웃 안에서 내용만 바꾼다.**
 **프레임은 base.css가, 디자인은 테마 CSS가 책임진다.**
 
@@ -74,7 +84,9 @@ PPT 전체가 "한 문서"로 보이려면 **프레임이 모든 슬라이드에
 - `assets/build.py`: JSON → HTML 자동 조립 CLI 스크립트. **스킬 폴더에서 직접 실행한다. 복사 불필요.**
 - `assets/css/base.css`: 공용 프레임 골격. 빌드 시 결과물 폴더로 복사됨.
 - `assets/js/engine.js`: 발표 내비게이션 엔진. 빌드 시 결과물 폴더로 복사됨.
-- `templates/minimal-tech-hero.css`: 모든 컴포넌트 스타일 구현 예제. 빌드 시 기본 `theme.css`로 복사되지만, 실 발표에서는 결과물 폴더의 `theme.css`를 맞춤형으로 조정한다.
+- `assets/templates/minimal-tech-hero.css`: 밝은 미니멀 SaaS/AI 스타일 레퍼런스 테마.
+- `assets/templates/flat-serif.css`: 명조체 + 플랫 디자인 편집 스타일 테마.
+- 빌드 시 `-t <이름>`으로 선택하면 해당 템플릿이 `theme.css`로 복사된다. 실 발표에서는 결과물 폴더의 `theme.css`를 맞춤형으로 조정한다.
 
 ### 1.2 결과물 폴더
 결과물은 **반드시** `<workspace>/projects/<deck-name>/`에 모은다.
@@ -136,16 +148,21 @@ PPT 전체가 "한 문서"로 보이려면 **프레임이 모든 슬라이드에
 ```
 
 ### 3.2 슬라이드 타입 (`slides[].type`)
-- `cover`: 표지
-- `sectionDivider`: 장 구분
-- `qna`: 마지막 Q&A
-- `content` (혹은 빈 값): 일반 콘텐츠 (base.css의 `.stage` 5층 그리드 레이아웃 적용)
+
+`type`이 `content` 또는 빈 값이면 `.stage` 5층 그리드(.kicker → h1/h2 → .lead → 컴포넌트)가 적용되고, 그 외 3종은 풀스크린 중앙 정렬 레이아웃을 자체적으로 가진다.
+
+| type | JSON 키 | 생성 HTML | CSS 클래스 |
+|---|---|---|---|
+| `cover` | `kicker`, `title`, `subtitle`, `presenter` | `div.cover > .cover-kicker + h1 + .lead + .cover-meta` | `.cover`, `.cover-kicker`, `.cover-meta` |
+| `sectionDivider` | `chapter`, `title` | `div.divider > .chapter + h2` | `.divider`, `.divider .chapter` |
+| `qna` | `title`, `subtitle` | `div.qna > h1 + .qna-subtitle` | `.qna`, `.qna-subtitle` |
+| `content` (혹은 빈 값) | `kicker`, `title`, `lead`, `components[]` | `.stage` 5층 그리드 | (각 컴포넌트 클래스) |
 
 ### 3.3 컴포넌트 카탈로그 (`components[].type`)
 > 여기서 선언한 type이 그대로 HTML 클래스가 되며 테마 CSS가 이를 그린다.
 - **구조/요약**: `toc`(목차), `summary`(요약 결론)
-- **내용/데이터**: `cards`(항목 그리드), `flow`(순서 노드), `contract`(다단 노드), `split`(좌우 대비), `table`(수치표), `checklist`(점검), `timeline`(시간 흐름), `image`(사진/스크린샷), `video`(영상)
-- **보조/강조**: `keyMessage`(핵심 1문장), `banner`(경고/안내 박스), `source`(출처), `cta`(행동 유도 버튼)
+- **내용/데이터**: `cards`(항목 그리드), `flow`(순서 노드), `split`(좌우 대비), `table`(수치표), `checklist`(점검), `timeline`(시간 흐름), `map`(4분면 매핑), `image`(사진/스크린샷), `video`(영상)
+- **보조/강조**: `keyMessage`(핵심 1문장), `banner`(경고/안내 박스), `source`(출처)
 
 ### 3.4 컴포넌트별 JSON 키 & CSS 클래스 매핑
 
@@ -155,56 +172,24 @@ PPT 전체가 "한 문서"로 보이려면 **프레임이 모든 슬라이드에
 |---|---|---|---|
 | `cards` | `items[].title`, `items[].desc` | `div.card > strong + span` | `.cards`, `.card` |
 | `flow` | `items[].title`, `items[].desc` | `div.node > h3 + p` | `.flow`, `.node` |
-| `contract` | `items[].title`, `items[].desc` | `div.node > h3 + p` | `.contract`, `.node` |
 | `split` | `items[].title`, `items[].desc` | `div.path > strong + p` | `.split`, `.path` |
 | `table` | `headers[]`, `rows[][]` | `table > thead/tbody` | `table`, `th`, `td` |
 | `checklist` | `items[].text` | `ul > li.check-item` | `.checklist`, `.check-item` |
 | `timeline` | `items[].date`, `items[].desc` | `div.timeline-item > strong + span` | `.timeline`, `.timeline-item` |
 | `map` | `items[].title`, `items[].desc` | `div.map > .box > strong + span` | `.map`, `.box` |
 | `image` | `src`, `alt` | `div.image-frame > img` | `.image-frame` |
-| `video` | `src`, `autoplay`(opt), `loop`(opt), `controls`(opt) | `div.video-frame > video` | `.video-frame` |
+| `video` | `src` (mp4 / YouTube watch·youtu.be / Vimeo URL — build.py가 embed로 자동 변환), `autoplay`(opt, mp4만), `loop`(opt, mp4만), `controls`(opt, mp4만) | YouTube/Vimeo: `div.video-frame > iframe` / mp4: `div.video-frame > video` | `.video-frame` |
 | `toc` | `items[].title`, `items[].page` | `ul > li.toc-item > span + span` | `.toc`, `.toc-item` |
 | `summary` | `text` | `div.summary > p` | `.summary` |
 | `keyMessage` | `message` | `div.key-message` | `.key-message` |
 | `banner` | `text`, `style` (info/warn) | `div.banner` | `.banner`, `.banner.info`, `.banner.warn` |
 | `source` | `text` | `div.source` | `.source` |
-| `cta` | `text`, `href` | `a.cta` | `.cta` |
 
 ---
 
 ## 4. 테마 CSS 작성 가이드
 
-`minimal-tech-hero`는 단일 레퍼런스 템플릿이다. 프레임(클래스명·HTML 구조)은 고정하고, 실제 발표의 디자인(색상·폰트·간격·장식)은 결과물 폴더의 `theme.css`에서 사용자 맞춤형으로 작성한다.
-
-> **테마 생성 시 주의사항 (전수 구현 원칙)**
-> 새로운 CSS 테마를 생성할 때는 나중에 어떤 컴포넌트를 꺼내 쓰더라도 디자인이 깨지지 않도록 **[§3.4 컴포넌트별 JSON 키 & CSS 클래스 매핑](#34-컴포넌트별-json-키--css-클래스-매핑)에 명시된 모든 컴포넌트 스타일을 반드시 포함해야 한다.**
-> 일부 컴포넌트만 구현하는 것은 금지되며, 이는 테마의 범용성과 안정성을 위한 강제 사항이다.
-
-### 4.1 필수 구현 클래스 (전수 검사 대상)
-아래 클래스는 build.py가 출력하는 HTML과 1:1 대응한다. 새 테마에서 **하나라도 누락되면 안 된다.**
-
-```
-/* 기본 구조 */  .step, .kicker, h1, h2, .lead
-/* 특수 슬라이드 */  .cover-meta, .divider, .divider .chapter, .qna
-/* 내용/데이터 */  .cards .card strong span, .flow .node h3 p,
-                  .split .path strong p, table th td,
-                  .checklist .check-item, .timeline .timeline-item,
-                  .image-frame, .video-frame, .contract, .map .box, .toc .toc-item
-/* 보조/강조 */  .key-message, .banner .banner.info .banner.warn,
-                .source, .cta, .summary
-```
-
-### 4.2 여백(Spacing) 및 비율 시스템의 통일성
-- **하드코딩 금지**: `gap: 32px`, `padding: 16px` 처럼 숫자를 직접 적지 않는다.
-- **전역 변수 활용**: `base.css`에 정의된 표준 간격 토큰(`--gap-xs`, `--gap-sm`, `--gap-md`, `--gap-lg`, `--gap-xl`)을 테마 CSS 전반에 일관되게 적용하여 전체 템플릿의 **비율과 통일감**을 유지한다.
-- **버튼 및 개별 요소 정렬**: `.cta` 같은 버튼 요소나 `.key-message` 등이 `.content`(flex-column) 안에서 불필요하게 늘어나거나(stretch) 서로 달라붙지 않도록 `align-self: center;` 와 `--gap` 변수를 통해 독립적인 숨쉴 공간을 반드시 확보한다.
-
-### 4.3 레퍼런스 템플릿
-현재 `templates/` 폴더에는 `minimal-tech-hero` 하나만 유지한다. 이 파일은 새 맞춤형 테마를 만들 때 참고하는 구현 예제이며, 빌드 시 `-t`를 생략하면 테스트 폴백으로 적용된다.
-
-| 파일명 | 역할 | 추천 용도 | 비주얼 |
-|---|---|---|---|
-| `minimal-tech-hero` | 모든 컴포넌트 구현을 보여주는 레퍼런스 템플릿 | 맞춤형 `theme.css` 제작의 출발점, 테스트 빌드 폴백 | [미리보기](./assets/examples/minimal-tech-hero-demo/index.html) |
+테마 CSS 작성 및 새로운 템플릿 구조화에 대한 상세 지침은 [THEME_GUIDE.md](./THEME_GUIDE.md)를 참고한다.
 
 ---
 
@@ -216,7 +201,7 @@ PPT 전체가 "한 문서"로 보이려면 **프레임이 모든 슬라이드에
 1.  **사전 협의 및 승인 (Mandatory)**: 본 작업 전 반드시 사용자에게 디자인 방향성(사용자 요청·레퍼런스·산업 톤)과 슬라이드 구성(개수, 컴포넌트 배치)을 제안하고 **명시적인 승인**을 받는다. 임의로 설계를 진행하지 않는다.
 2.  **JSON 설계**: 승인된 구조에 따라 [§3. JSON 스펙 가이드](#3-json-스펙-가이드)를 참고하여 `spec.json`을 먼저 생성한다.
 3.  **빌드 실행**: `build.py`를 실행하여 `index.html`, `base.css`, `theme.css`, `engine.js`를 생성한다.
-4.  **맞춤형 테마 CSS 구현 및 검증**: 결과물 폴더의 `theme.css`를 사용자 요청과 레퍼런스에 맞게 작성하고, `minimal-tech-hero.css`의 컴포넌트 커버리지를 기준으로 전수 검증한다.
+4.  **맞춤형 테마 CSS 구현 및 검증**: 결과물 폴더의 `theme.css`를 사용자 요청과 레퍼런스에 맞게 작성하고, 기존 템플릿의 컴포넌트 커버리지를 기준으로 전수 검증한다.
 5.  **결과 보고**: 생성된 파일 링크와 함께, **사용자가 직접 스타일을 튜닝할 수 있도록 구현된 테마 CSS 전체 코드를 별도의 코드 블록으로 제공한다.** (복사 유도)
 ### 5.2 세부 스타일 튜닝 (Fine-tuning)
 결과물의 세부 디자인을 조정할 때는 다음의 **Bottom-up** 방식을 권장한다.

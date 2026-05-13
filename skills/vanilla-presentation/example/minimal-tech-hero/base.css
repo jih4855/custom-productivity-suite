@@ -81,7 +81,7 @@ body {
   opacity: 0;
   pointer-events: none;
   overflow: hidden;
-  transform: translate3d(0, 0, 0) scale(1);
+  transform: translate3d(var(--x), var(--y), 0) scale(1);
   transition: opacity 0.5s ease, transform 0.7s cubic-bezier(.22, .61, .36, 1);
 }
 
@@ -132,10 +132,6 @@ body {
   min-width: 0;
   margin: 0;
   /* 자식의 외부 margin 차단. 사이 간격은 row-gap이 책임. */
-}
-
-.lead--empty {
-  display: none;
 }
 
 /* 본문 콘텐츠는 가용 공간을 차지(헤더·제목·푸터 사이를 채움)

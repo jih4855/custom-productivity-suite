@@ -17,19 +17,6 @@ def attr(value) -> str:
     return escape(str(value or ""), quote=True)
 
 
-def safe_url(value, allowed_schemes=("http", "https", "mailto", "")) -> str:
-    """Allow only browser-safe URL schemes in generated links/media."""
-    raw = str(value or "").strip()
-    if not raw:
-        return ""
-    parsed = urlparse(raw)
-    if parsed.scheme and parsed.scheme not in allowed_schemes:
-        return ""
-    if parsed.scheme == "" and raw.startswith("//"):
-        return ""
-    return attr(raw)
-
-
 def safe_media_src(value) -> str:
     """Allow http(s), root-relative, and local relative media paths."""
     raw = str(value or "").strip()
@@ -67,17 +54,6 @@ def render_component(comp):
 
     elif ctype == "flow":
         html = '<div class="flow">'
-        for item in comp.get("items", []):
-            html += f'''
-            <div class="node">
-              <h3>{text(item.get('title'))}</h3>
-              <p>{text(item.get('desc'))}</p>
-            </div>'''
-        html += '</div>'
-        return html
-
-    elif ctype == "contract":
-        html = '<div class="contract">'
         for item in comp.get("items", []):
             html += f'''
             <div class="node">
@@ -136,15 +112,36 @@ def render_component(comp):
         </div>'''
 
     elif ctype == "video":
+        raw_src = str(comp.get("src", "")).strip()
+        if not raw_src:
+            return '<div class="video-frame" aria-label="Video placeholder"></div>'
+        # YouTube watch URL / youtu.be 단축 URL → embed URL 자동 변환.
+        # Vimeo 일반 URL → player URL 자동 변환. (사용자가 일반 공유 URL 그대로 박아도 동작)
+        import re as _re
+        m = _re.match(r"https?://(?:www\.|m\.)?youtube\.com/watch\?(?:.*&)?v=([\w-]+)", raw_src)
+        if m:
+            raw_src = f"https://www.youtube.com/embed/{m.group(1)}"
+        m = _re.match(r"https?://youtu\.be/([\w-]+)", raw_src)
+        if m:
+            raw_src = f"https://www.youtube.com/embed/{m.group(1)}"
+        m = _re.match(r"https?://(?:www\.)?vimeo\.com/(\d+)", raw_src)
+        if m:
+            raw_src = f"https://player.vimeo.com/video/{m.group(1)}"
+        safe_src = safe_media_src(raw_src)
+        if not safe_src:
+            return '<div class="video-frame" aria-label="Video placeholder"></div>'
+        # YouTube/Vimeo embed URL은 iframe으로 렌더링한다.
+        if "youtube.com/embed" in raw_src or "player.vimeo.com" in raw_src:
+            return (
+                f'<div class="video-frame"><iframe src="{safe_src}" '
+                f'loading="lazy" allowfullscreen '
+                f'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe></div>'
+            )
+        # 그 외(mp4 등)는 기존 <video> 태그
         autoplay = "autoplay muted playsinline" if comp.get("autoplay", False) else ""
         loop = "loop" if comp.get("loop", False) else ""
         controls = "controls" if comp.get("controls", True) else ""
-        src = safe_media_src(comp.get("src"))
-        if not src:
-            return '<div class="video-frame" aria-label="Video placeholder"></div>'
-        return f'''<div class="video-frame">
-          <video src="{src}" {autoplay} {loop} {controls}></video>
-        </div>'''
+        return f'<div class="video-frame"><video src="{safe_src}" {autoplay} {loop} {controls}></video></div>'
 
     # ── 구조/요약 ─────────────────────────────
     elif ctype == "toc":
@@ -172,10 +169,6 @@ def render_component(comp):
     elif ctype == "source":
         return f'<div class="source">{text(comp.get("text"))}</div>'
 
-    elif ctype == "cta":
-        href = safe_url(comp.get("href", "#")) or "#"
-        return f'<a class="cta" href="{href}">{text(comp.get("text"))}</a>'
-
     elif ctype == "map":
         html = '<div class="map">'
         for item in comp.get("items", []):
@@ -194,44 +187,43 @@ def render_component(comp):
 # ─────────────────────────────────────────
 
 def render_slide(slide, index, total, layout):
-    stepW = layout.get("stepW", 1320)
+    stepW = layout.get("stepW", 1280)
     x = index * stepW
     y = 0
 
-    stype = slide.get("type")
+    stype = slide.get("type") or "content"
     sid   = attr(slide.get("id", f"s{index+1}"))
 
     # ── 슬라이드 래퍼 ──────────────────────────────
-    html = f'<div id="{sid}" class="step" data-x="{x}" data-y="{y}" style="--x:{x}px; --y:{y}px;">'
+    # step 자체에 슬라이드 타입 클래스 부여 (.step--cover / .step--sectionDivider / .step--qna / .step--content)
+    # → 특수 슬라이드는 .step의 padding을 0으로 덮어 풀스크린 디자인이 가능하도록.
+    type_cls = f"step--{attr(stype)}"
+    html = f'<div id="{sid}" class="step {type_cls}" data-x="{x}" data-y="{y}">'
 
     # ── 특수 타입: 풀스크린 중앙 정렬 ──────────────
+    # 디자인은 모두 테마 CSS (.cover / .divider / .qna)에서 책임진다.
+    # build.py는 의미적 클래스만 출력하고 인라인 스타일은 넣지 않는다.
     if stype == "cover":
         html += f'''
-        <div style="display:flex; flex-direction:column; justify-content:center; align-items:flex-start; height:100%;
-                    padding: var(--slide-pad-y) var(--slide-pad-x); box-sizing:border-box; max-width:var(--stage-w); margin:auto;">
-          <p style="font-size:14px; font-weight:800; letter-spacing:.08em; text-transform:uppercase;
-                    color:var(--muted); margin:0 0 clamp(16px,3vh,28px);">{text(slide.get('kicker', 'PRESENTATION'))}</p>
-          <h1 style="margin:0 0 clamp(12px,2vh,20px);">{text(slide.get('title'))}</h1>
-          <p class="lead" style="margin:0 0 clamp(20px,4vh,40px);">{text(slide.get('subtitle'))}</p>
-          <p style="font-size:15px; color:var(--muted); border-top:1px solid var(--line);
-                    padding-top:16px; width:100%; margin:0;">{text(slide.get('presenter'))}</p>
+        <div class="cover">
+          <p class="cover-kicker">{text(slide.get('kicker', 'PRESENTATION'))}</p>
+          <h1>{text(slide.get('title'))}</h1>
+          <p class="lead">{text(slide.get('subtitle'))}</p>
+          <p class="cover-meta">{text(slide.get('presenter'))}</p>
         </div>'''
 
     elif stype == "sectionDivider":
         html += f'''
-        <div style="display:flex; flex-direction:column; justify-content:center; align-items:center;
-                    text-align:center; height:100%; background:var(--bg-sub);">
-          <p style="font-size:14px; font-weight:800; letter-spacing:.08em; text-transform:uppercase;
-                    color:var(--muted); margin:0 0 16px;">{text(slide.get('chapter'))}</p>
-          <h2 style="font-size:clamp(40px,4vw,56px); margin:0;">{text(slide.get('title'))}</h2>
+        <div class="divider">
+          <p class="chapter">{text(slide.get('chapter'))}</p>
+          <h2>{text(slide.get('title'))}</h2>
         </div>'''
 
     elif stype == "qna":
         html += f'''
-        <div style="display:flex; flex-direction:column; justify-content:center; align-items:center;
-                    text-align:center; height:100%;">
-          <h1 style="font-size:clamp(72px,10vw,120px); margin:0 0 16px;">{text(slide.get('title', 'Q&A'))}</h1>
-          <p style="font-size:clamp(20px,2vw,28px); color:var(--muted); margin:0;">{text(slide.get('subtitle'))}</p>
+        <div class="qna">
+          <h1>{text(slide.get('title', 'Q&A'))}</h1>
+          <p class="qna-subtitle">{text(slide.get('subtitle'))}</p>
         </div>'''
 
     # ── 일반 타입: .stage 5층 그리드 ───────────────
@@ -256,7 +248,7 @@ def render_slide(slide, index, total, layout):
         title_html = f'<{title_tag}>{title_text}</{title_tag}>'
 
         # lead — 고정 row 3 (없으면 빈 div로 행 유지)
-        lead_html = f'<p class="lead">{lead_text}</p>' if lead_text else '<div class="lead" style="display:none;"></div>'
+        lead_html = f'<p class="lead">{lead_text}</p>' if lead_text else '<p class="lead lead--empty" aria-hidden="true"></p>'
 
         # 컴포넌트를 stage 직계 자식으로 직접 렌더 (wrapper 제거)
         # → base.css의 ".stage > :is(.cards, .flow, ...)" stretch 셀렉터가 그대로 작동
@@ -289,7 +281,7 @@ def build(spec_path: str, theme: str, out_path: str, layout_override: dict):
     slides = data.get("slides", [])
 
     # 2. 레이아웃: PPT처럼 좌우로만 이동한다.
-    layout = data.get("layout", {"stepW": 1320})
+    layout = data.get("layout", {"stepW": 1280})
     if "grid" in data:
         layout["stepW"] = data["grid"].get("stepW", layout["stepW"])
     layout.update({k: v for k, v in layout_override.items() if v is not None})
@@ -364,7 +356,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-t", "--theme",
         default="minimal-tech-hero",
-        help="templates/ 폴더 안 테마 파일명 — 확장자(.css) 제외 (기본: minimal-tech-hero)"
+        help="assets/templates/ 폴더 안 테마 파일명 — 확장자(.css) 제외 (기본: minimal-tech-hero)"
     )
     parser.add_argument(
         "-o", "--out",

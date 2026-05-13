@@ -1,0 +1,692 @@
+/*
+ * flat-serif.css
+ * ────────────────────────────────────────────
+ * design-glossary 인덱스 레이아웃을 충실히 이식한 편집 디자인 테마.
+ *
+ * 핵심 차이점 (vs minimal-tech-hero):
+ *   ① 헤더: badge + 대형 명조 h2 (좌) │ tagline(lead) (우), 밑줄 분리
+ *   ② 본문: 플랫 디자인, 1px 테두리 카드
+ *   ③ 푸터: 하단 얇은 선 + 모노 메타정보
+ *   ④ 색상: off-white 바탕, 인디고 포인트, 플랫 디자인
+ *   ⑤ 타이포: 명조(Serif) 제목 + 고딕(Sans) 본문 + 고정폭(Mono) 라벨
+ */
+
+/* ============================================================ */
+/*  0. Fonts                                                     */
+/* ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+/* ============================================================ */
+/*  1. Design tokens                                             */
+/* ============================================================ */
+:root {
+  /* surface */
+  --bg: #f9f9fb;
+  --surface: #ffffff;
+  --surface-alt: #f1f3f6;
+
+  /* ink */
+  --ink: #111111;
+  --ink-2: #444444;
+  --ink-3: #71717a;
+
+  /* accent */
+  --primary: #6366f1;
+  --primary-soft: #eef2ff;
+
+  /* semantic */
+  --warn: #dc2626;
+  --warn-soft: #fee2e2;
+
+  /* border */
+  --border: #e5e7eb;
+
+  /* font stacks */
+  --serif: 'Noto Serif KR', serif;
+  --sans: 'Noto Sans KR', -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* layout */
+  --stage-w: 1160px;
+
+  font-family: var(--sans);
+}
+
+/* ============================================================ */
+/*  2. Slide shell — 3-row grid (head / body / foot)             */
+/* ============================================================ */
+html, body, #presentation {
+  background: var(--bg);
+}
+.step {
+  background: var(--bg) !important;
+  color: var(--ink);
+  text-align: left;
+  align-items: stretch;
+}
+
+/*
+ * .stage를 design-glossary의 4행 레이아웃으로 강제 변환:
+ *   row 1 — kicker (badge)                 ← 고정 auto
+ *   row 2 — h2 (제목 + border-bottom)       ← 고정 auto
+ *   row 3 — 컴포넌트 (본문 영역)            ← 1fr, 수직 중앙
+ *   row 4 — 푸터 (border-top + 발표자)      ← 고정 auto
+ *   각 영역 사이 10px 갭
+ */
+.stage {
+  width: min(var(--stage-w), 100%);
+  height: 100%;
+  margin-inline: auto;
+  padding: 44px 60px;
+  box-sizing: border-box;
+  position: relative;
+
+  display: grid !important;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 10px;
+  text-align: left;
+  overflow: hidden;
+
+  /* 푸터 발표자 정보 — 프로젝트별 theme.css에서 덮어쓰기 가능 */
+  --footer-text: "vanilla-presentation";
+}
+
+/* --- 각 요소를 명시적 행에 배치 --- */
+.stage > .kicker { grid-row: 1; }
+.stage > h2      { grid-row: 2; }
+
+/* --- 본문 영역(컴포넌트): row 3, 수직 중앙 정렬 --- */
+.stage > :is(.cards, .flow, .map, .split, table, .image-frame, .video-frame,
+             .timeline, .checklist, .toc, .summary, .banner, .source,
+             .key-message) {
+  grid-row: 3;
+  align-self: center;
+}
+
+/* --- 푸터: ::after → row 4, 발표자 소속/이름 표시 --- */
+.stage::after {
+  content: var(--footer-text);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: 0.08em;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+  grid-row: 4;
+  align-self: end;
+}
+
+/* ============================================================ */
+/*  3. Header area — badge + title (left) / tagline (right)      */
+/* ============================================================ */
+
+/* --- kicker → badge 스타일 --- */
+.kicker {
+  display: inline-block;
+  width: fit-content;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--primary);
+  background: var(--primary-soft);
+  padding: 6px 12px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  text-align: left;
+}
+/* kicker 내부의 dot/span 숨김 */
+.kicker > span:first-child::before { display: none; }
+
+/* --- h2 → 대형 명조체 --- */
+h2 {
+  font-family: var(--serif);
+  font-size: 52px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--ink);
+  margin: 0;
+  text-align: left;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+
+/* --- lead → tagline 역할 (h2 옆에 우측 배치) --- */
+.lead {
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.55;
+  max-width: 480px;
+  white-space: nowrap;
+  text-align: right;
+  margin: 0;
+
+  /* 헤더 우측 정렬 */
+  position: absolute;
+  top: 44px;
+  right: 60px;
+}
+
+/* h2::after 제거 (border-bottom을 h2 자체에 넣었으므로) */
+h2::after { display: none; }
+
+/* ============================================================ */
+/*  4. h1 (cover/qna 전용)                                       */
+/* ============================================================ */
+h1 {
+  font-family: var(--serif);
+  font-size: 88px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--ink);
+  margin: 0;
+}
+
+/* ============================================================ */
+/*  5. Component zoom — 오버플로우 방지                            */
+/* ============================================================ */
+.stage > :is(.cards, .flow, .map, .split, table, .image-frame, .video-frame,
+             .timeline, .checklist, .toc, .summary, .banner, .source,
+             .key-message) {
+  zoom: 0.72;
+}
+.cards, .flow, .map, .split, .toc, .timeline, .checklist, table,
+.summary, .banner, .source, .key-message, .image-frame {
+  width: 100%;
+}
+
+/* ============================================================ */
+/*  6. Cover                                                     */
+/* ============================================================ */
+.cover {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+  padding: 60px;
+  box-sizing: border-box;
+  max-width: var(--stage-w);
+  margin: auto;
+  gap: 18px;
+}
+.cover-kicker {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--primary);
+  background: var(--primary-soft);
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+.cover .lead {
+  position: static;
+  text-align: center;
+  white-space: normal;
+  max-width: 600px;
+  font-family: var(--sans);
+  font-size: 22px;
+  color: var(--ink-2);
+  margin: 0 auto;
+}
+.cover-meta {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-3);
+  letter-spacing: 0.1em;
+  margin-top: 24px;
+}
+
+/* ============================================================ */
+/*  7. Section Divider                                           */
+/* ============================================================ */
+.divider {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+  padding: 60px;
+  box-sizing: border-box;
+}
+.divider .chapter {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--primary);
+  letter-spacing: 0.2em;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+.divider h2 {
+  text-align: center;
+  font-size: 52px;
+}
+.divider h2::after { display: none; }
+
+/* ============================================================ */
+/*  8. QnA                                                       */
+/* ============================================================ */
+.qna {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+  padding: 60px;
+  box-sizing: border-box;
+}
+.qna h1 {
+  font-size: 88px;
+}
+.qna-subtitle {
+  font-family: var(--sans);
+  font-size: 22px;
+  color: var(--ink-2);
+  margin-top: 18px;
+}
+
+/* ============================================================ */
+/*  9. Cards                                                     */
+/* ============================================================ */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 28px 24px;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.card strong {
+  font-family: var(--serif);
+  font-size: 20px;
+  color: var(--ink);
+  display: block;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.card span {
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+
+/* ============================================================ */
+/*  10. Flow                                                     */
+/* ============================================================ */
+.flow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  gap: 24px;
+  counter-reset: flow-step;
+}
+.flow .node {
+  position: relative;
+  padding: 20px;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  counter-increment: flow-step;
+}
+.flow .node::before {
+  content: counter(flow-step);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px; height: 24px;
+  background: var(--primary);
+  color: white;
+  border-radius: 50%;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.flow .node:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  top: 50%;
+  right: -18px;
+  font-family: var(--mono);
+  color: var(--ink-3);
+  transform: translateY(-50%);
+  font-size: 14px;
+}
+.flow .node h3 {
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 6px;
+  color: var(--ink);
+}
+.flow .node p {
+  font-size: 13px;
+  color: var(--ink-2);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ============================================================ */
+/*  11. Split                                                    */
+/* ============================================================ */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.split .path {
+  padding: 32px;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.split .path:first-child {
+  border-left: 3px solid var(--primary);
+}
+.split .path strong {
+  display: block;
+  font-family: var(--serif);
+  font-size: 22px;
+  margin-bottom: 12px;
+  color: var(--ink);
+}
+.split .path p {
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ============================================================ */
+/*  12. Table                                                    */
+/* ============================================================ */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  background: var(--surface);
+}
+th, td {
+  text-align: left;
+  padding: 9px 11px;
+  border-bottom: 1px solid var(--border);
+}
+th {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  background: var(--surface-alt);
+}
+td:first-child {
+  font-family: var(--mono);
+  font-weight: 500;
+  color: var(--primary);
+  width: 25%;
+}
+td {
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+
+/* ============================================================ */
+/*  13. Checklist                                                */
+/* ============================================================ */
+.checklist {
+  list-style: none;
+  padding: 0; margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+.check-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--ink);
+}
+.check-item::before {
+  content: "✓";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px; height: 22px;
+  background: var(--primary);
+  color: white;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* ============================================================ */
+/*  14. Timeline                                                 */
+/* ============================================================ */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+  border-left: 2px solid var(--border);
+  padding-left: 28px;
+}
+.timeline-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  left: -34px;
+  top: 22px;
+  width: 10px; height: 10px;
+  background: var(--primary-soft);
+  border: 2px solid var(--primary);
+  border-radius: 50%;
+}
+.timeline-item strong {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+.timeline-item span {
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+/* ============================================================ */
+/*  15. Map                                                      */
+/* ============================================================ */
+.map {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+.map .box {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.map .box strong {
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+.map .box span {
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.6;
+}
+
+/* ============================================================ */
+/*  16. Image                                                    */
+/* ============================================================ */
+.image-frame {
+  height: 380px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.image-frame img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+
+/* ============================================================ */
+/*  17. Video                                                    */
+/* ============================================================ */
+.stage > .video-frame {
+  height: 360px;
+  width: 640px;
+  margin: 0 auto;
+  background: #0f1117;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================================ */
+/*  18. TOC                                                      */
+/* ============================================================ */
+.toc {
+  list-style: none;
+  padding: 0; margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+.toc-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.toc-item span:first-of-type {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.toc-item span:last-of-type {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--ink-3);
+}
+
+/* ============================================================ */
+/*  19. Key Message                                              */
+/* ============================================================ */
+.key-message {
+  font-family: var(--serif);
+  font-size: 20px;
+  line-height: 1.55;
+  color: var(--ink);
+  padding: 14px 18px;
+  background: var(--primary-soft);
+  border-left: 3px solid var(--primary);
+  border-radius: 4px;
+  text-align: left;
+}
+
+/* ============================================================ */
+/*  20. Banner                                                   */
+/* ============================================================ */
+.banner {
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 13px;
+  line-height: 1.55;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  text-align: left;
+}
+.banner.info {
+  background: var(--primary-soft);
+  color: #312e81;
+  border-left: 3px solid var(--primary);
+}
+.banner.warn {
+  background: var(--warn-soft);
+  color: #7f1d1d;
+  border-left: 3px solid var(--warn);
+}
+
+/* ============================================================ */
+/*  21. Summary                                                  */
+/* ============================================================ */
+.summary {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 28px 32px;
+  text-align: left;
+}
+.summary p {
+  font-family: var(--serif);
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--ink);
+  margin: 0;
+}
+
+/* ============================================================ */
+/*  22. Source                                                    */
+/* ============================================================ */
+.source {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  text-align: left;
+  letter-spacing: 0.04em;
+}

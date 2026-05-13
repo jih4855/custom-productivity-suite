@@ -9,7 +9,7 @@
  * 출력 형식:
  *   1) 디자인 토큰 (CSS 변수)
  *   2) 공통 슬라이드 레이아웃
- *   3) 컴포넌트별 CSS (16종 전수 구현)
+ *   3) 컴포넌트별 CSS (14종 전수 구현)
  */
 
 /* ============================================================ */
@@ -44,8 +44,8 @@
   --radius-sm: 14px;
 
   /* layout */
-  --stage-w: 1080px;
-  --slide-pad-x: clamp(48px, 7vw, 88px);
+  --stage-w: 1152px;
+  --slide-pad-x: 64px;
   --slide-pad-y: clamp(56px, 8vh, 88px);
   --stage-row-gap: 28px;
   --component-gap: 32px;
@@ -169,7 +169,6 @@ h2 {
    stage가 1120px(--stage-w)로 가로 폭을 책임지므로 컴포넌트는 100% 채움 */
 .cards,
 .flow,
-.contract,
 .map,
 .split,
 .toc,
@@ -180,17 +179,16 @@ table,
 .banner,
 .source,
 .key-message,
-.image-frame,
-.video-frame {
+.image-frame {
   width: 100%;
 }
+/* .video-frame은 base.css에서 명시적 720×405로 통제 (여기에 width:100% 두면 충돌) */
 
 /* base.css의 남는 높이 채우기 규칙을 이 테마에서는 끈다.
    모든 슬라이드는 kicker → title → lead → main 컴포넌트 간격을 같은 row-gap으로 맞춘다. */
 .stage > :is(.grid,
   .cards,
   .flow,
-  .contract,
   .map,
   .split,
   table,
@@ -206,14 +204,32 @@ table,
   .banner,
   .source,
   .footnote,
-  .cta,
   .key-message) {
   flex: 0 0 auto;
   min-height: auto;
 }
 
+/* 메인 컴포넌트 영역만 추가로 축소 (헤더 kicker/h1/h2/lead는 유지)
+   비디오 프레임 포함하여 전체 컴포넌트 크기를 일괄 20% 더 축소합니다. */
+.stage > :is(.cards,
+  .flow,
+  .map,
+  .split,
+  table,
+  .image-frame,
+  .video-frame,
+  .timeline,
+  .checklist,
+  .toc,
+  .summary,
+  .banner,
+  .source,
+  .key-message) {
+  zoom: 0.64;
+}
+
 /* ============================================================ */
-/*  3. 컴포넌트별 CSS (16종 — SKILL.md §3.4 매핑)                */
+/*  3. 컴포넌트별 CSS (14종 — SKILL.md §3.4 매핑)                */
 /* ============================================================ */
 
 /* --------- 3-1. cards ---------
@@ -262,7 +278,7 @@ table,
 */
 .flow {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
   grid-auto-rows: min-content;
   align-content: center;
   gap: var(--component-gap);
@@ -315,55 +331,7 @@ table,
   line-height: 1.55;
 }
 
-/* --------- 3-3. contract ---------
-   build.py: <div class="contract"><div class="node"><h3/><p/></div>...</div>
-   계약/조건 카드 — 좌측 accent 라인 + 라벨 톤 헤더
-*/
-.contract {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
-  grid-auto-rows: min-content;
-  align-content: center;
-  gap: var(--component-gap);
-}
-.contract .node {
-  position: relative;
-  padding: var(--gap-lg);
-  padding-left: calc(var(--gap-lg) + 6px);
-  text-align: left;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-card);
-  box-shadow: var(--shadow-soft);
-  overflow: hidden;
-}
-.contract .node::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 36px;
-  bottom: 36px;
-  width: 4px;
-  background: var(--accent);
-  border-radius: var(--radius-pill);
-}
-.contract .node h3 {
-  margin: 0 0 10px;
-  color: var(--text-muted);
-  font-size: 21px;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-.contract .node p {
-  margin: 0;
-  color: var(--text-primary);
-  font-size: 22px;
-  font-weight: 600;
-  line-height: 1.5;
-}
-
-/* --------- 3-4. split ---------
+/* --------- 3-3. split ---------
    build.py: <div class="split"><div class="path"><strong/><p/></div>x2</div>
 */
 .split {
@@ -402,7 +370,7 @@ table,
   line-height: 1.65;
 }
 
-/* --------- 3-5. table ---------
+/* --------- 3-4. table ---------
    build.py: <table><thead><tr><th/></tr></thead><tbody><tr><td/></tr></tbody></table>
 */
 table {
@@ -447,7 +415,7 @@ tbody tr:hover td {
   background: var(--accent-soft);
 }
 
-/* --------- 3-6. toc ---------
+/* --------- 3-5. toc ---------
    build.py: <ul class="toc"><li class="toc-item"><span/><span/></li>...</ul>
    번호 + 제목 + 페이지
 */
@@ -500,7 +468,7 @@ tbody tr:hover td {
   letter-spacing: 0.08em;
 }
 
-/* --------- 3-7. checklist ---------
+/* --------- 3-6. checklist ---------
    build.py: <ul class="checklist"><li class="check-item">{text}</li>...</ul>
 */
 .checklist {
@@ -551,7 +519,7 @@ tbody tr:hover td {
   border-width: 0 2px 2px 0;
 }
 
-/* --------- 3-8. timeline ---------
+/* --------- 3-7. timeline ---------
    build.py: <div class="timeline"><div class="timeline-item"><strong/><span/></div>...</div>
    세로 timeline — dot + line
 */
@@ -616,7 +584,7 @@ tbody tr:hover td {
   line-height: 1.35;
 }
 
-/* --------- 3-9. map ---------
+/* --------- 3-8. map ---------
    build.py: <div class="map"><div class="box"><strong/><span/></div>...</div>
    첫 항목을 핵심 노드로, 나머지를 주변 노드로 시각화
 */
@@ -631,7 +599,7 @@ tbody tr:hover td {
   display: flex;
   flex-direction: column;
   gap: var(--card-inner-gap);
-  padding: var(--gap-lg);
+  padding: var(--gap-md) var(--gap-lg);
   text-align: left;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -649,7 +617,7 @@ tbody tr:hover td {
   line-height: 1.5;
   color: var(--text-secondary);
 }
-/* --------- 3-10. banner ---------
+/* --------- 3-9. banner ---------
    build.py: <div class="banner"> 또는 <div class="banner info|warn">{text}</div>
 */
 .banner {
@@ -692,7 +660,7 @@ tbody tr:hover td {
   box-shadow: 0 0 0 4px rgba(234, 179, 8, 0.18);
 }
 
-/* --------- 3-11. summary ---------
+/* --------- 3-10. summary ---------
    build.py: <div class="summary"><p>{text}</p></div>
    요약 카드 (강한 위계)
 */
@@ -721,14 +689,14 @@ tbody tr:hover td {
   text-wrap: balance;
 }
 
-/* --------- 3-12. image ---------
+/* --------- 3-11. image ---------
    build.py: <div class="image-frame"><img src/></div> 또는 placeholder
 */
 .image-frame {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 320px;
+  height: 360px;
   padding: 0;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -752,7 +720,7 @@ tbody tr:hover td {
   object-fit: cover;
 }
 
-/* --------- 3-13. source ---------
+/* --------- 3-12. source ---------
    build.py: <div class="source">{text}</div>
 */
 .source {
@@ -765,16 +733,18 @@ tbody tr:hover td {
   text-align: center;
 }
 
-/* --------- 3-14. video ---------
+/* --------- 3-13. video ---------
    build.py: <div class="video-frame"><video src/></div> 또는 placeholder
    placeholder 시 중앙 play button 표시
 */
-.video-frame {
+.stage > .video-frame {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 320px;
+  height: 405px;
+  width: 720px;
+  margin-inline: auto;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-card);
@@ -812,46 +782,7 @@ tbody tr:hover td {
   object-fit: cover;
 }
 
-/* --------- 3-15. cta ---------
-   build.py: <a class="cta" href>{text}</a>
-   stage 직계 자식 — align-self로 가운데 정렬
-*/
-.cta {
-  align-self: center;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 62px;
-  padding: 19px 42px;
-  background: var(--text-primary);
-  color: #ffffff;
-  border: 1px solid var(--text-primary);
-  border-radius: var(--radius-pill);
-  text-decoration: none;
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: -0.005em;
-  line-height: 1;
-  box-shadow: var(--shadow-card);
-  transition: transform 180ms ease, box-shadow 180ms ease,
-    background 180ms ease, border-color 180ms ease, color 180ms ease;
-}
-.cta:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.16);
-}
-.cta + .cta {
-  background: var(--surface);
-  color: var(--text-primary);
-  border-color: var(--border);
-  box-shadow: var(--shadow-soft);
-}
-.cta + .cta:hover {
-  border-color: var(--text-primary);
-  background: var(--surface-strong);
-}
-
-/* --------- 3-16. keyMessage ---------
+/* --------- 3-14. keyMessage ---------
    build.py: <div class="key-message">{message}</div>
 */
 .key-message {
@@ -876,8 +807,52 @@ tbody tr:hover td {
 /* ============================================================ */
 /*  4. 특수 슬라이드 (cover / sectionDivider / qna)              */
 /* ============================================================ */
+
+/* ----- cover ----- */
+.cover {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+  padding: var(--slide-pad-y, 60px) var(--slide-pad-x, 64px);
+  box-sizing: border-box;
+  max-width: var(--stage-w, 1152px);
+  margin: auto;
+  gap: clamp(16px, 3vh, 28px);
+}
+.cover-kicker {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.cover-meta {
+  margin: 0;
+  padding-top: 16px;
+  width: 100%;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+/* ----- sectionDivider ----- */
+/* 배경은 본문(.step → var(--bg))과 동일하게 두어 슬라이드 간 색 일관성 유지.
+   시각적 차별화는 chapter pill 하나로 충분. */
 .divider {
-  background: linear-gradient(180deg, var(--surface-strong), var(--bg));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+  padding: var(--slide-pad-y, 60px) var(--slide-pad-x, 64px);
+  box-sizing: border-box;
+  background: var(--bg);
+  gap: 24px;
 }
 .divider .chapter {
   display: inline-block;
@@ -891,9 +866,31 @@ tbody tr:hover td {
   letter-spacing: 0.16em;
   box-shadow: var(--shadow-soft);
 }
+.divider h2 {
+  margin: 0;
+  font-size: clamp(40px, 4vw, 56px);
+}
 
-.cover-meta {
+/* ----- qna ----- */
+.qna {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+  padding: var(--slide-pad-y, 60px) var(--slide-pad-x, 64px);
+  box-sizing: border-box;
+  gap: 16px;
+}
+.qna h1 {
+  margin: 0;
+  font-size: clamp(72px, 10vw, 120px);
+}
+.qna-subtitle {
+  margin: 0;
   color: var(--text-muted);
+  font-size: clamp(20px, 2vw, 28px);
 }
 
 /* ============================================================ */
@@ -928,8 +925,5 @@ tbody tr:hover td {
   }
   h2 {
     font-size: clamp(30px, 8vw, 40px);
-  }
-  .cta {
-    width: min(100%, 320px);
   }
 }
