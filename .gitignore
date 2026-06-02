@@ -38,5 +38,8 @@ index.html
 *.xlsx
 *.csv
 data.json
+# 실수로 개인 프로필이나 지원용 이력서 데이터가 커밋되는 것을 방지하기 위해 이중으로 차단합니다.
+resume-data-*.json
+resume-data.json
 !skills/**/assets/examples/**/data.json
 !skills/**/assets/engine-creator/templates/data.json
